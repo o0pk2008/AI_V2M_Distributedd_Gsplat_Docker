@@ -1,0 +1,47 @@
+<!-- 
+作者: Ning
+文件名: FrameRoot.html
+描述: 上传进度显示页面。
+版本: 1.0.0
+最后修改日期: 2024-01-19
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <link rel="stylesheet" href="./FrameRoot.css" />
+    <link
+      rel="stylesheet"
+      href="./googleapis.css"
+    />
+  </head>
+  <body>
+    <div class="frame-upload">
+      <div class="grouphead">
+        <b class="create">创作 / Create </b>
+        <button class="x-close">
+          <img class="icon" alt="" src="./public/icon@2x.png" />
+        </button>
+      </div>
+      <div class="frame-upload-inner">
+        <div class="frame-wrapper">
+          <div class="d-parent">
+            <div class="d-">正在上传 “新的3D-测试”</div>
+            <div class="div4">0%</div>
+            <div class="frame-progress-parent">
+              <div class="frame-progress">
+                <progress id="progressBar" class="frame-progress-child" value="50" max="100"></progress>
+              </div>
+              <button class="btn-cancel">
+                <div class="div5">取消</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

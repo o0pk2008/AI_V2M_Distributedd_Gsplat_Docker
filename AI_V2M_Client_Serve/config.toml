@@ -1,0 +1,21 @@
+title = "Server Config"
+
+[servers]
+
+[servers.upload_folder]
+http = "E:/Python/AI_V2M_Distributedd_Gsplat_Docker/AI_V2M_CloudStorage/uploads"
+
+[servers.updata_url]
+http = "http://192.168.2.94:5100/"
+
+[servers.edit_url]
+http = "http://192.168.2.94:5100/"
+
+[servers.home_port]
+port = 5000
+
+[servers.database]
+path = "sql/Data.db"
+
+[servers.task_serve]
+http = "http://192.168.2.94:5200/"

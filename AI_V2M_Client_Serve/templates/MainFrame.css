@@ -1,0 +1,162 @@
+.create2 {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  line-height: 33.6px;
+  font-weight: 700;
+  font-family: inherit;
+}
+.icon19 {
+  position: absolute;
+  height: 50%;
+  width: 50%;
+  top: 25%;
+  right: 25%;
+  bottom: 25%;
+  left: 25%;
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+}
+.x-close2 {
+  cursor: pointer;
+  position: relative;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.create-button1 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  font-size: 24px;
+  color: #000;
+  font-family: Inter;
+}
+.upload-cloud-01-icon {
+  position: relative;
+  width: 109px;
+  height: 109px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.div25 {
+  position: relative;
+  font-weight: 500;
+}
+.drop,
+.inner-frame1 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.drop {
+  cursor: pointer;
+  background-color: #f2f2f2;
+  padding: 61px;
+  gap: 87px;
+}
+.inner-frame1 {
+  padding: 0 4px;
+  gap: 12px;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
+  font-family: Inter;
+}
+.help-square-icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.btn-help,
+.div26 {
+  display: flex;
+  align-items: center;
+}
+.div26 {
+  position: relative;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: Inter;
+  color: #fff;
+  text-align: center;
+  justify-content: center;
+}
+.btn-help {
+  cursor: pointer;
+  border: 0;
+  padding: 6px 20px 5px 7px;
+  background-color: #000;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 5px;
+}
+.help-circle-icon2 {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.btn-qa,
+.div27 {
+  display: flex;
+  align-items: center;
+}
+.div27 {
+  position: relative;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: Inter;
+  color: #fff;
+  text-align: center;
+  justify-content: center;
+}
+.btn-qa {
+  cursor: pointer;
+  border: 0;
+  padding: 6px 23px 5px 8px;
+  background-color: #000;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 6px;
+}
+.help-and-q-a-btn {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+}
+.help-and-q-a-btn,
+.help-and-q-a-btn-wrapper,
+.main-frame {
+  display: flex;
+  justify-content: flex-start;
+}
+.help-and-q-a-btn-wrapper {
+  align-self: stretch;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0 7px;
+}
+.main-frame {
+  position: relative;
+  background: linear-gradient(#fff, #fff), #fff;
+  width: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px;
+  box-sizing: border-box;
+  gap: 20px;
+}
+
+

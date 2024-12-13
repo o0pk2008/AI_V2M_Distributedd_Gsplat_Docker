@@ -1,0 +1,50 @@
+<!-- 
+作者: Ning
+文件名: iframe_progressBar.html
+描述: 上传进度显示页面。
+版本: 1.0.0
+最后修改日期: 2024-01-19
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iframe_upload</title>
+    <link href="./tailwind/tailwind.min.css" rel="stylesheet">
+    <script src="./tailwind/feather.min.js"></script>
+
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <p class="absolute font-semibold text-gray-900 left-12 top-8 text-lg">Create</p>
+    <button type="button" class="absolute right-11 top-8 text-gray-400 hover:text-gray-500 x-close">
+        <span class="sr-only">Close</span>
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
+
+    <div class="rounded-lg p-4 m-12 w-full h-80 content-center">
+        <div
+            class="relative flex w-full items-center overflow-hidden px-4 pb-8 pt-14 sm:px-6 sm:pt-8 md:p-6 lg:p-8">
+            <div class="grid w-full grid-rows-2">
+                <h2 class="text-sm font-bold text-gray-900 sm:pr-12">uploading <span id="loadingText" class="div4">0%</span>
+                </h2>
+                <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        feather.replace();
+    })
+</script>
+
+</html>

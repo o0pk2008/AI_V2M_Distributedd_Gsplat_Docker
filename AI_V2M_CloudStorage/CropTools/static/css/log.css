@@ -1,0 +1,504 @@
+body {
+  background-color: rgb(0, 0, 0);
+}
+
+.vizzio-logo-highres-2 {
+  align-self: stretch;
+  height: 27.3px;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.icon-frame {
+  width: 161px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 21px 0 0;
+  box-sizing: border-box;
+}
+
+.frame-line-pair-child {
+  width: 1px;
+  height: 29.9px;
+  position: relative;
+  border-right: 1px solid var(--color-white);
+  box-sizing: border-box;
+}
+
+.frame-line-pair {
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 var(--padding-xl) 0 0;
+  box-sizing: border-box;
+}
+
+.button-login-btnmenu-child {
+  align-self: stretch;
+  height: 22px;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.button-login-btnmenu {
+  height: 24px;
+  width: 85px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 22px 0 0;
+  box-sizing: border-box;
+}
+
+.separator-line {
+  width: 1px;
+  height: 29.9px;
+  position: relative;
+  border-right: 1px solid var(--color-white);
+  box-sizing: border-box;
+}
+
+.frame-line-pair1 {
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 10px 0 0;
+  box-sizing: border-box;
+}
+
+.icon {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: cover;
+  min-height: 30px;
+}
+
+.satellite-image-3d {
+  height: 25px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.line-frames {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0 14px;
+  max-width: 100%;
+}
+
+.btn-login-icon,
+.btn-menu-icon {
+  height: 35px;
+  width: 35px;
+  position: relative;
+  object-fit: cover;
+  min-height: 35px;
+}
+
+.btn-menu-icon {
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.container-btn-login-btn-menu,
+.head {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0 16px;
+}
+
+.head {
+  align-self: stretch;
+  background-color: rgba(0, 0, 0, 1.0);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-24xl) 99px var(--padding-24xl) 88px;
+  box-sizing: border-box;
+  max-width: 100%;
+  gap: 20px;
+  text-align: left;
+  font-size: 16px;
+  color: var(--color-white);
+  font-family: var(--font-inter);
+  z-index: 99;
+  position: relative;
+}
+
+/* 进度背景图 */
+.stepnav-icon {
+  height: 121px;
+  width: 1156px;
+  overflow: hidden;
+  z-index: 1;
+  background-image: url('/static/public/StepNav_1.png');
+  background-size: contain;
+}
+
+/* loading动画 */
+.group-loading-icon {
+  width: 80px;
+  height: 80px;
+  top: 20%;
+  left: 50%;
+  z-index: 99;
+  position: relative;
+  transform: translate(-50%, -50%);
+  background-image: url('/static/public/group-loading@2x.png');
+  background-size: contain;
+  animation: rotate 2s linear infinite;
+  /* 旋转动画 */
+  display: none;
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+    /* 开始时的旋转角度 */
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+    /* 结束时的旋转角度 */
+  }
+}
+
+.image-bg-rect,
+.step-nav-frame {
+  margin: 0 auto;
+  /* 水平居中 */
+}
+
+.step-nav-frame {
+  width: 1196px;
+  margin: 60px auto 0;
+  /* Centering horizontally and providing top margin */
+  max-height: calc(100vh - 60px);
+  /* Adjusting max-height based on viewport height and top margin */
+  overflow-y: auto;
+  /* Adding overflow-y:auto to enable scrolling if content exceeds max-height */
+  z-index: 99;
+  position: relative;
+}
+
+
+.group-outputlog-icon {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* 让它占满整个页面宽度 */
+  height: 300px;
+  /* 保持你原来的高度设置 */
+  background-color: rgba(0, 0, 0, 1.0);
+  background-image: url('/static/public/group-outputlog@2x.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 999;
+  /* 确保它在其他内容的上方 */
+}
+
+/* 可以将以下部分留空或根据需要调整样式 */
+#outputLog_main ul {
+  margin-top: 80px;
+  margin-bottom: 10px;
+  padding: 0;
+  height: 210px;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+#outputLog_main li {
+  padding-left: 25px;
+  padding-right: 25px;
+  color: #66c37d;
+  list-style: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 23px;
+}
+
+
+.page-container {
+  overflow: hidden;
+}
+
+.calculate-page {
+  width: 1440px;
+  position: relative;
+  /* background-color: #000000; */
+  margin: 0 auto;
+  /* 水平居中 */
+  overflow: hidden;
+  /* display: flex; */
+  /* flex-direction: row; */
+  align-items: center;
+  justify-content: center;
+  letter-spacing: normal;
+  height: 100vh;
+  /* 上下填满屏幕 */
+}
+
+/* @media screen and (max-width: 1200px) {
+  .step-nav-frame {
+    gap: 189px 0;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .head {
+    padding-left: 44px;
+    padding-right: 49px;
+    box-sizing: border-box;
+  }
+
+  .step-nav-frame {
+    gap: 189px 0;
+  }
+
+  .page-container {
+    gap: var(--gap-222xl);
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .head {
+    padding-left: var(--padding-xl);
+    padding-right: var(--padding-xl);
+    box-sizing: border-box;
+  }
+
+  .step-nav-frame {
+    gap: 189px 0;
+  }
+
+  .page-container {
+    gap: var(--gap-222xl);
+  }
+} */
+
+
+/* head按钮 */
+.btn-login {
+  background-color: transparent;
+  background-image: url(/static/public/btn-login@2x.png);
+  background-size: contain;
+  width: 40px;
+  /* 根据图片尺寸调整 */
+  height: 40px;
+  /* 根据图片尺寸调整 */
+  /* border-radius: 40%; 让按钮变为圆形 */
+  border: none;
+  overflow: hidden;
+  /* 隐藏按钮内部溢出的内容 */
+  cursor: pointer;
+}
+
+/* head按钮 */
+.btn-menu {
+  background-color: transparent;
+  background-image: url(/static/public/btn-menu@2x.png);
+  background-size: contain;
+  width: 40px;
+  /* 根据图片尺寸调整 */
+  height: 40px;
+  /* 根据图片尺寸调整 */
+  /* border-radius: 40%; 让按钮变为圆形 */
+  border: none;
+  overflow: hidden;
+  /* 隐藏按钮内部溢出的内容 */
+  cursor: pointer;
+}
+
+/* 日志面板 */
+#outputLog_main {
+  background-color: rgba(0, 0, 0, 1.0);
+  width: 1440px;
+  height: 40px;
+  background-image: url('/static/public/group-outputlog@2x.png');
+  background-repeat: no-repeat;
+  background-size: 1440px;
+}
+
+#outputLog_main ul {
+  margin-top: 40px;
+  margin-bottom: 10px;
+  padding: 0;
+  height: 210px;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+#outputLog_main li {
+  padding-left: 25px;
+  padding-right: 25px;
+  color: #2AE5B3;
+  list-style: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 23px;
+}
+
+/* 定义滚动条的样式 */
+#outputLog_main ul::-webkit-scrollbar {
+  width: 12px;
+  /* 设置滚动条宽度 */
+}
+
+/* 定义滚动条轨道的样式 */
+#outputLog_main ul::-webkit-scrollbar-track {
+  background-color: #101010;
+  /* 设置滚动条轨道背景色 */
+}
+
+/* 定义滚动条滑块的样式 */
+#outputLog_main ul::-webkit-scrollbar-thumb {
+  background-color: #3d3d3d;
+  /* 设置滚动条滑块颜色 */
+  border-radius: 6px;
+  /* 设置滑块边角的圆角 */
+}
+
+/* 定义滚动条滑块悬停时的样式 */
+#outputLog_main ul::-webkit-scrollbar-thumb:hover {
+  background-color: #515151;
+  /* 设置滑块悬停时的颜色 */
+}
+
+/* 日志打印区域 */
+.stepnav-icon ul {
+  display: flex;
+  /* 使用 flex 布局 */
+  list-style-type: none;
+  /* 移除列表样式 */
+  padding-top: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+}
+
+.stepnav-icon ul li:first-child {
+  /* 设置第一个 li 元素的样式 */
+  color: #2AE5B3;
+  /* 设置其他颜色 */
+}
+
+.stepnav-icon ul li:not(:last-child) {
+  margin-right: 67px;
+  /* 设置 LI 之间的间距 */
+}
+
+.stepnav-icon ul li {
+  cursor: pointer;
+  padding: 10px;
+  /* 设置 LI 的内边距 */
+  padding-top: 40px;
+}
+
+.stepnav-icon ul li:hover {
+  color: #2AE5B3;
+  /* 设置悬停时的字体颜色 */
+}
+
+/* 日志隐藏按钮 */
+.btn-outputlog {
+  background-color: transparent;
+  background-image: url(/static/public/btn_log.png);
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: 21px;
+  width: 21px;
+  height: 21px;
+  border: none;
+  cursor: pointer;
+  padding-left: 155px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  transform: scaleY(-1);
+}
+
+/* 设置嵌入的 iframe 样式 */
+/*
+.wrapper-image-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  filter: blur(0px); 
+}
+
+.wrapper-image-bg {
+  margin: 0 !important;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: -1;
+  background-image: url(/static/public/image-bg@2x.png);
+}
+*/
+
+.wrapper-image-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  /* 去除边框 */
+  filter: blur(0px);
+  /* 设置模糊半径 */
+}
+
+/* 设置 iframe 全屏 */
+.embedded-iframe {
+  width: 100%;
+  height: 100%;
+}
+
+/* 开启计算按钮 */
+.CalculateBtn {
+  top: 50%;
+  left: 50%;
+  z-index: 99;
+  position: relative;
+  transform: translate(-50%, -50%);
+  width: 366px;
+  height: 70px;
+  background-image: url('/static/public/check_img/Group_Start.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: opacity 0.35s ease;
+  display: none;
+}
+
+.CalculateBtn:hover {
+  opacity: 1.0;
+}

@@ -1,0 +1,219 @@
+<!-- 
+作者: Ning
+文件名: Home.html
+描述: 平台主页面。
+版本: 1.0.0
+最后修改日期: 2024-04-23
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIZZIO | My Captures</title>
+    <link href="./tailwind/tailwind.min.css" rel="stylesheet">
+    <script src="./tailwind/feather.min.js"></script>
+    <link href="./css/home.css" rel="stylesheet">
+</head>
+<style>
+    /* 自定义 CSS 样式 */
+    .notification {
+        transition: transform 0.5s ease-in-out;
+    }
+
+    #MyCapturesContainer {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    #MyCapturesContainer.animate {
+        opacity: 1;
+    }
+
+    #exploreContainer {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    #exploreContainer.animate {
+        opacity: 1;
+    }
+</style>
+
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <!-- Nav -->
+    <nav class="bg-white shadow py-5 px-4 flex justify-between items-center select-none">
+        <div class="max-w-screen-2xl mx-auto flex justify-between items-center w-full">
+            <div class="logos flex items-center space-x-8">
+                <img src="./img/icon_vizzio.png" alt="Logo 1" class="h-8 mr-2 object-contain">
+                <img src="./img/icon_ailab.png" alt="Logo 2" class="h-8 mr-2">
+                <div class="flex items-center space-x-2">
+                    <img src="./img/icon_v2m.png" alt="Logo 3" class="h-8">
+                    <p class="text-s">Media Scan 3D</p>
+                </div>
+            </div>
+            {% if username %}
+            <!-- 读取登录的用户名 -->
+            <script>var UserName = "{{ username }}";</script>
+            <script>var UserID = "{{ user_id }}";</script>
+            <div class="flex items-center space-x-4">
+                <a href="#"
+                    class="flex bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded space-x-2"
+                    onclick="showPopup('upload_drop')">
+                    <i data-feather="upload" alt="User Avatar" class="h-5 w-5"></i>
+                    <p>Create</p>
+                </a>
+                <div class="relative">
+                    <button class="bg-gray-200 text-gray-600 p-2 rounded-full hover:bg-gray-300" id="userBtn">
+                        <i data-feather="user" alt="User Avatar" class="h-5 w-5"></i>
+                    </button>
+                    <div class="absolute right-0 mt-2 bg-white border rounded-md shadow-lg hidden w-44 z-10"
+                        id="userDropdown">
+                        <div class="py-2">
+                            <p class="block px-0 py-2 pl-4 text-gray-800 hover:bg-gray-100 truncate">@{{ username }}</p>
+                            <a href="#" class="block px-0 py-2 pl-4 text-gray-800 hover:bg-gray-100"
+                                onclick="logout()">sign
+                                out</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative ml-4">
+                    <button class="bg-gray-200 text-gray-600 p-2 rounded-full hover:bg-gray-300" id="menuBtn">
+                        <i data-feather="menu" alt="Menu" class="h-5 w-5"></i>
+                    </button>
+                    <div class="absolute right-0 mt-2 bg-white border rounded-md shadow-lg hidden w-44 z-10"
+                        id="menuDropdown">
+                        <div class="py-2">
+                            <a href="#" class="block px-0 py-2 pl-4 text-gray-800 hover:bg-gray-100">Meet the Team</a>
+                            <a href="#" class="block px-0 py-2 pl-4 text-gray-800 hover:bg-gray-100">Other</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <!-- 没有登录则用户名为空 -->
+            <script>var UserName = "";</script>
+            <script>var UserID = "{{ user_id }}";</script>
+            <a href="./loginPage"
+                class="flex bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded space-x-2">
+                <i data-feather="log-in" alt="User Avatar" class="h-5 w-5 pt-1"></i>
+                <p>Login</p>
+            </a>
+            {% endif %}
+        </div>
+    </nav>
+    <!-- /Nav -->
+
+    <!-- Search -->
+    <div class="mx-auto w-full max-w-screen-2xl mt-4 p-4" id="searchForm">
+        <div class="relative flex items-center">
+            <label class="relative block flex-grow">
+                <span class="sr-only">Search</span>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                    <svg class="h-5 w-5 fill-slate-300" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </span>
+                <input id="searchInput"
+                    class="placeholder:italic placeholder:text-slate-400 block bg-gray-100 w-full border border-gray-300 rounded-md py-2 pl-9 pr-3 focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+                    placeholder="Search for your capture..." type="text" name="search" />
+            </label>
+            <button type="button" class="bg-gray-200 text-gray-600 p-2 rounded-md hover:bg-gray-300 ml-2 hidden"
+                id="CancelBtn">
+                <i data-feather="x" alt="Cancel" class="h-5 w-5"></i>
+            </button>
+            <!-- <button type="button" class="bg-gray-200 text-gray-600 p-2 rounded-md hover:bg-gray-300 ml-2 hidden" id="SearchBtn">
+                <i data-feather="arrow-right" alt="search" class="h-5 w-5"></i>
+            </button> -->
+        </div>
+
+    </div>
+    <!-- /Search -->
+
+    {% if username %}
+    <!-- My Captures -->
+    <main class="container mx-auto max-w-screen-2xl my-8 px-4">
+        <h2 class="text-2xl font-bold mb-4">My Captures</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 My_Captures"
+            id="MyCapturesContainer">
+            <div class="col-span-full text-center">
+                <p class="text-2xl font-bold">Welcome to VIZZIO.AI!</p>
+                <p class="mt-2"><a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                        onclick="showPopup('upload_drop')">Create</a> your first capture today.</p>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination" id="pagination">
+                <!-- 动态生成分页链接将插入这里 -->
+            </nav>
+        </div>
+    </main>
+    <!-- /My Captures -->
+    <!-- Explore -->
+    <main class="container mx-auto max-w-screen-2xl my-8 px-4">
+        <h2 class="text-2xl font-bold mb-4">Explore</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 Explore" id="exploreContainer">
+
+        </div>
+    </main>
+    <!-- /Explore -->
+    {% else %}
+    <!-- My Captures -->
+    <main class="container mx-auto max-w-screen-2xl my-8 px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 My_Captures">
+            <div class="col-span-full text-center">
+                <p class="text-2xl font-bold">Welcome to VIZZIO.AI!</p>
+                <p class="mt-2 text-center text-sm text-gray-500">
+                    Not a member?
+                    <a href="./RegisterPage" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start
+                        a 14 day free
+                        trial</a>
+                </p>
+            </div>
+        </div>
+    </main>
+    <!-- /My Captures -->
+    <!-- Explore -->
+    <main class="container mx-auto max-w-screen-2xl my-8 px-4">
+        <h2 class="text-2xl font-bold mb-4">Explore</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 Explore">
+
+        </div>
+    </main>
+    <!-- /Explore -->
+    {% endif %}
+    <!-- Footer -->
+    <footer class="py-6 mt-auto">
+        <div
+            class="container mx-auto max-w-screen-2xl text-center text-gray-400 flex flex-col items-center justify-between md:flex-row">
+            <div class="mb-4 md:mb-0">© 2024 VIZZIO.AI, Inc.</div>
+            <div class="flex flex-col md:flex-row md:space-x-4">
+                <a href="#" class="hover:text-black mb-2 md:mb-0 md:mt-auto">Capture Guide</a>
+                <a href="#" class="hover:text-black mb-2 md:mb-0 md:mt-auto">Changelog</a>
+                <a href="#" class="hover:text-black mb-2 md:mb-0 md:mt-auto">Terms of Service</a>
+                <a href="#" class="hover:text-black mb-2 md:mb-0 md:mt-auto">Contact Us</a>
+                <a href="#" class="hover:text-black mb-2 md:mb-0 md:mt-auto">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    <!-- /Footer -->
+
+    <div id="popup_main">
+        <iframe id="createFrame" scrolling="no"></iframe>
+    </div>
+
+    <!-- 通知窗口 -->
+    <div id="notification"
+        class="notification fixed bottom-0 w-full bg-green-500 text-white px-4 py-2 transform translate-y-full transition-transform duration-500 text-center">
+        This is a notification!
+    </div>
+</body>
+
+<script src="js/socket.io.js"></script>
+<script src="./js/home.js"></script>
+
+</html>

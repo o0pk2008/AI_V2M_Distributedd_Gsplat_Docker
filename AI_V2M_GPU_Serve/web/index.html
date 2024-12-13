@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <title>GPU Manager │ Vizzio │ AI Lab</title>
+
+    <meta name="description" content="GPU Manager │ Vizzio │ AI Lab" />
+    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="./googleapis.css" />
+    <script src="./index.js"></script>
+  </head>
+  <body>
+    <div class="gpu-manager">
+      <header class="frame-parent">
+        <div class="frame-group">
+          <div class="frame-container">
+            <div class="logo-2-parent">
+              <img
+                class="logo-2-icon"
+                loading="eager"
+                alt=""
+                src="./public/logo-2@2x.png"
+              />
+              <div class="line-container1"></div>
+              
+              <div class="g-p-u-manager-label">
+                <img
+                  class="frame-icon"
+                  loading="eager"
+                  alt=""
+                  src="./public/frame.svg"
+                />
+                <b class="gpu-manager1">GPU Manager V2</b>
+              </div>
+                </div>
+          </div>
+          
+        </div>
+        <div class="menu-frame">
+          <div class="menu">
+            <button class="btn-serverstate btn_select">
+              <div class="div">Server Status</div>
+            </button>
+            <button class="btn-usermanager">
+              <div class="div1">Users Manage</div>
+            </button>
+            <button class="btn-systemset">
+              <div class="div2">Settings</div>
+            </button>
+            <button class="btn-help">
+              <div class="div3">Help</div>
+            </button>
+          </div>
+        </div>
+      </header>
+      <h1 class="maintitle">服务器数据统计 / Server Statistics</h1>
+      <section class="server-group-frame">
+        <div class="server-group">
+          <div class="groupcard-1">
+            <div class="groupcard-1-child"></div>
+            <h2 class="maintitle1">Online Server</h2>
+            <b class="maintitle2" id="Online-Server">0</b>
+          </div>
+          <div class="groupcard-2">
+            <div class="groupcard-1-child"></div>
+            <h2 class="maintitle1">Total Completed</h2>
+            <b class="maintitle2" id="Total-Completed">0</b>
+          </div>
+          <div class="groupcard-3">
+            <div class="groupcard-1-child"></div>
+            <h2 class="maintitle1">Calculating</h2>
+            <b class="maintitle2" id="Calculating">0</b>
+          </div>
+          <div class="groupcard-4">
+            <div class="groupcard-1-child"></div>
+            <h2 class="maintitle1">Task Queue</h2>
+            <b class="maintitle2" id="Task-Queue">0</b>
+          </div>
+        </div>
+      </section>
+      <h1 class="maintitle">服务器状态 / Server Status</h1>
+      <section class="server-group-frame">
+        <div class="server-group">
+          <div class="project-li" id="GPU1">
+            <div class="bg-img">
+              <div class="bg-img-child"></div>
+              <div class="g-p-u-display"></div>
+              <div class="bg-img-item"></div>
+              <div class="bg-img-inner"></div>
+              <div class="line-div"></div>
+              <div class="bg-img-child1"></div>
+              <div class="f-r-a-m-e-t-i-t-l-e">
+                <div class="gpu-name">
+                  <b class="gpuname">GPU_Server_01</b>
+                  <div class="b-gimg">
+                    <div class="line-line">
+                      <div class="title-parent">
+                        <div class="title">系统</div>
+                        <div class="title1">内存</div>
+                        <div class="title2">交换</div>
+                        <div class="title3">下载</div>
+                      </div>
+                      <div class="var-parent">
+                        <div class="var Windows">Null</div>
+                        <div class="var1 memory_info">0MB / 0MB</div>
+                        <div class="var2 network_usage">0GB / 0GB</div>
+                        <div class="var-group">
+                          <div class="var3 download_speed">0Kbps</div>
+                          <div class="g-p-u-status-group">
+                            <div class="server-status"></div>
+                            <div class="menu-frame1"></div>
+                            <div class="g-p-u-status-group-child"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="frame-title">
+                  <div class="title4">位置</div>
+                  <div class="title5">在线</div>
+                  <div class="title6">硬盘</div>
+                  <div class="title7">上传</div>
+                </div>
+                <div class="variable-frame">
+                  <div class="status-frame">
+                    <div class="var4 ip"> </div>
+                    <div class="var5 uptime"> </div>
+                  </div>
+                  <div class="status-label">
+                    <div class="status">
+                      <div class="status1">offline</div>
+                    </div>
+                    <div class="status-label-inner">
+                      <div class="var-container">
+                        <div class="var6 disk_usage">0GB / 0GB</div>
+                        <div class="var7 upload_speed">0Kbps</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="statusblock-parent">
+                <div class="statusblock">
+                  <div class="title8">CPU</div>
+                  <div class="framegroupstatuslabel">
+                    <div class="status2 cpu">0%</div>
+                    <div class="rectangle-parent">
+                      <progress class="progressCPU frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+                <div class="titlewithoccupancy">
+                  <div class="title9">RAM</div>
+                  <div class="status-parent">
+                    <div class="status2 ram">0%</div>
+                    <div class="occupancy">
+                      <progress class="progressRAM frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+                <div class="footertext">
+                  <div class="title10">DISK</div>
+                  <div class="status-group">
+                    <div class="status2 disk">0%</div>
+                    <div class="occupancy1">
+                      <progress class="progressDISK frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="project-li" id="GPU2">
+            <div class="bg-img">
+              <div class="bg-img-child"></div>
+              <div class="g-p-u-display"></div>
+              <div class="bg-img-item"></div>
+              <div class="bg-img-inner"></div>
+              <div class="line-div"></div>
+              <div class="bg-img-child1"></div>
+              <div class="f-r-a-m-e-t-i-t-l-e">
+                <div class="gpu-name">
+                  <b class="gpuname">GPU_Server_02</b>
+                  <div class="b-gimg">
+                    <div class="line-line">
+                      <div class="title-parent">
+                        <div class="title">系统</div>
+                        <div class="title1">内存</div>
+                        <div class="title2">交换</div>
+                        <div class="title3">下载</div>
+                      </div>
+                      <div class="var-parent">
+                        <div class="var Windows">Null</div>
+                        <div class="var1 memory_info">0MB / 0MB</div>
+                        <div class="var2 network_usage">0GB / 0GB</div>
+                        <div class="var-group">
+                          <div class="var3 download_speed">0Kbps</div>
+                          <div class="g-p-u-status-group">
+                            <div class="server-status"></div>
+                            <div class="menu-frame1"></div>
+                            <div class="g-p-u-status-group-child"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="frame-title">
+                  <div class="title4">位置</div>
+                  <div class="title5">在线</div>
+                  <div class="title6">硬盘</div>
+                  <div class="title7">上传</div>
+                </div>
+                <div class="variable-frame">
+                  <div class="status-frame">
+                    <div class="var4 ip"> </div>
+                    <div class="var5 uptime"> </div>
+                  </div>
+                  <div class="status-label">
+                    <div class="status">
+                      <div class="status1">offline</div>
+                    </div>
+                    <div class="status-label-inner">
+                      <div class="var-container">
+                        <div class="var6 disk_usage">0GB / 0GB</div>
+                        <div class="var7 upload_speed">0Kbps</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="statusblock-parent">
+                <div class="statusblock">
+                  <div class="title8">CPU</div>
+                  <div class="framegroupstatuslabel">
+                    <div class="status2 cpu">0%</div>
+                    <div class="rectangle-parent">
+                      <progress class="progressCPU frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+                <div class="titlewithoccupancy">
+                  <div class="title9">RAM</div>
+                  <div class="status-parent">
+                    <div class="status2 ram">0%</div>
+                    <div class="occupancy">
+                      <progress class="progressRAM frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+                <div class="footertext">
+                  <div class="title10">DISK</div>
+                  <div class="status-group">
+                    <div class="status2 disk">0%</div>
+                    <div class="occupancy1">
+                      <progress class="progressDISK frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="project-li" id="GPU3">
+            <div class="bg-img">
+              <div class="bg-img-child"></div>
+              <div class="g-p-u-display"></div>
+              <div class="bg-img-item"></div>
+              <div class="bg-img-inner"></div>
+              <div class="line-div"></div>
+              <div class="bg-img-child1"></div>
+              <div class="f-r-a-m-e-t-i-t-l-e">
+                <div class="gpu-name">
+                  <b class="gpuname">GPU_Server_03</b>
+                  <div class="b-gimg">
+                    <div class="line-line">
+                      <div class="title-parent">
+                        <div class="title">系统</div>
+                        <div class="title1">内存</div>
+                        <div class="title2">交换</div>
+                        <div class="title3">下载</div>
+                      </div>
+                      <div class="var-parent">
+                        <div class="var Windows">Null</div>
+                        <div class="var1 memory_info">0MB / 0MB</div>
+                        <div class="var2 network_usage">0GB / 0GB</div>
+                        <div class="var-group">
+                          <div class="var3 download_speed">0Kbps</div>
+                          <div class="g-p-u-status-group">
+                            <div class="server-status"></div>
+                            <div class="menu-frame1"></div>
+                            <div class="g-p-u-status-group-child"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="frame-title">
+                  <div class="title4">位置</div>
+                  <div class="title5">在线</div>
+                  <div class="title6">硬盘</div>
+                  <div class="title7">上传</div>
+                </div>
+                <div class="variable-frame">
+                  <div class="status-frame">
+                    <div class="var4 ip"> </div>
+                    <div class="var5 uptime"> </div>
+                  </div>
+                  <div class="status-label">
+                    <div class="status">
+                      <div class="status1">offline</div>
+                    </div>
+                    <div class="status-label-inner">
+                      <div class="var-container">
+                        <div class="var6 disk_usage">0GB / 0GB</div>
+                        <div class="var7 upload_speed">0Kbps</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="statusblock-parent">
+                <div class="statusblock">
+                  <div class="title8">CPU</div>
+                  <div class="framegroupstatuslabel">
+                    <div class="status2 cpu">0%</div>
+                    <div class="rectangle-parent">
+                      <progress class="progressCPU frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+                <div class="titlewithoccupancy">
+                  <div class="title9">RAM</div>
+                  <div class="status-parent">
+                    <div class="status2 ram">0%</div>
+                    <div class="occupancy">
+                      <progress class="progressRAM frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+                <div class="footertext">
+                  <div class="title10">DISK</div>
+                  <div class="status-group">
+                    <div class="status2 disk">0%</div>
+                    <div class="occupancy1">
+                      <progress class="progressDISK frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="project-li" id="GPU4">
+            <div class="bg-img">
+              <div class="bg-img-child"></div>
+              <div class="g-p-u-display"></div>
+              <div class="bg-img-item"></div>
+              <div class="bg-img-inner"></div>
+              <div class="line-div"></div>
+              <div class="bg-img-child1"></div>
+              <div class="f-r-a-m-e-t-i-t-l-e">
+                <div class="gpu-name">
+                  <b class="gpuname">GPU_Server_04</b>
+                  <div class="b-gimg">
+                    <div class="line-line">
+                      <div class="title-parent">
+                        <div class="title">系统</div>
+                        <div class="title1">内存</div>
+                        <div class="title2">交换</div>
+                        <div class="title3">下载</div>
+                      </div>
+                      <div class="var-parent">
+                        <div class="var Windows">Null</div>
+                        <div class="var1 memory_info">0MB / 0MB</div>
+                        <div class="var2 network_usage">0GB / 0GB</div>
+                        <div class="var-group">
+                          <div class="var3 download_speed">0Kbps</div>
+                          <div class="g-p-u-status-group">
+                            <div class="server-status"></div>
+                            <div class="menu-frame1"></div>
+                            <div class="g-p-u-status-group-child"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="frame-title">
+                  <div class="title4">位置</div>
+                  <div class="title5">在线</div>
+                  <div class="title6">硬盘</div>
+                  <div class="title7">上传</div>
+                </div>
+                <div class="variable-frame">
+                  <div class="status-frame">
+                    <div class="var4 ip"> </div>
+                    <div class="var5 uptime"> </div>
+                  </div>
+                  <div class="status-label">
+                    <div class="status">
+                      <div class="status1">offline</div>
+                    </div>
+                    <div class="status-label-inner">
+                      <div class="var-container">
+                        <div class="var6 disk_usage">0GB / 0GB</div>
+                        <div class="var7 upload_speed">0Kbps</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="statusblock-parent">
+                <div class="statusblock">
+                  <div class="title8">CPU</div>
+                  <div class="framegroupstatuslabel">
+                    <div class="status2 cpu">0%</div>
+                    <div class="rectangle-parent">
+                      <progress class="progressCPU frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+                <div class="titlewithoccupancy">
+                  <div class="title9">RAM</div>
+                  <div class="status-parent">
+                    <div class="status2 ram">0%</div>
+                    <div class="occupancy">
+                      <progress class="progressRAM frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+                <div class="footertext">
+                  <div class="title10">DISK</div>
+                  <div class="status-group">
+                    <div class="status2 disk">0%</div>
+                    <div class="occupancy1">
+                      <progress class="progressDISK frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="project-li" id="GPU5">
+            <div class="bg-img">
+              <div class="bg-img-child"></div>
+              <div class="g-p-u-display"></div>
+              <div class="bg-img-item"></div>
+              <div class="bg-img-inner"></div>
+              <div class="line-div"></div>
+              <div class="bg-img-child1"></div>
+              <div class="f-r-a-m-e-t-i-t-l-e">
+                <div class="gpu-name">
+                  <b class="gpuname">GPU_Server_05</b>
+                  <div class="b-gimg">
+                    <div class="line-line">
+                      <div class="title-parent">
+                        <div class="title">系统</div>
+                        <div class="title1">内存</div>
+                        <div class="title2">交换</div>
+                        <div class="title3">下载</div>
+                      </div>
+                      <div class="var-parent">
+                        <div class="var Windows">Null</div>
+                        <div class="var1 memory_info">0MB / 0MB</div>
+                        <div class="var2 network_usage">0GB / 0GB</div>
+                        <div class="var-group">
+                          <div class="var3 download_speed">0Kbps</div>
+                          <div class="g-p-u-status-group">
+                            <div class="server-status"></div>
+                            <div class="menu-frame1"></div>
+                            <div class="g-p-u-status-group-child"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="frame-title">
+                  <div class="title4">位置</div>
+                  <div class="title5">在线</div>
+                  <div class="title6">硬盘</div>
+                  <div class="title7">上传</div>
+                </div>
+                <div class="variable-frame">
+                  <div class="status-frame">
+                    <div class="var4 ip"> </div>
+                    <div class="var5 uptime"> </div>
+                  </div>
+                  <div class="status-label">
+                    <div class="status">
+                      <div class="status1">offline</div>
+                    </div>
+                    <div class="status-label-inner">
+                      <div class="var-container">
+                        <div class="var6 disk_usage">0GB / 0GB</div>
+                        <div class="var7 upload_speed">0Kbps</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="statusblock-parent">
+                <div class="statusblock">
+                  <div class="title8">CPU</div>
+                  <div class="framegroupstatuslabel">
+                    <div class="status2 cpu">0%</div>
+                    <div class="rectangle-parent">
+                      <progress class="progressCPU frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+                <div class="titlewithoccupancy">
+                  <div class="title9">RAM</div>
+                  <div class="status-parent">
+                    <div class="status2 ram">0%</div>
+                    <div class="occupancy">
+                      <progress class="progressRAM frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+                <div class="footertext">
+                  <div class="title10">DISK</div>
+                  <div class="status-group">
+                    <div class="status2 disk">0%</div>
+                    <div class="occupancy1">
+                      <progress class="progressDISK frame-child" value="0" max="100"></progress>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </section>
+    </div>
+    <div class="vizzioai-inc">© 2024 VIZZIO.AI, Inc.</div>
+  </body>
+</html>

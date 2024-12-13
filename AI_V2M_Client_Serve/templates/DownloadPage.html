@@ -1,0 +1,145 @@
+<!-- 
+作者: Ning
+文件名: DownloadPage.html
+描述: 相关文档显示页面。
+版本: 1.0.0
+最后修改日期: 2024-03-26
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloads</title>
+    <link rel="stylesheet" href="./DownloadPage.css" />
+</head>
+<body>
+    <div class="popup">
+        <div class="header">
+            <h2>Export model</h2>
+            <button id="close-button">&times;</button>
+        </div>
+        <div class="loading-text">
+            <span id="loadingText">Model calculating : <span id="progress">0%</span></span>
+            <div class="loading-spinner"></div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress" id="progressBar" style="width: 40%;"></div>
+        </div>
+        <div class="notes">
+            <ul>
+                <li>For the first export, select the Crop button and select the export range</li>
+                <li>Exported 3D files do not currently carry view depentent effects, like reflections</li>
+                <li>When imported into 3D software, like Blender, Unreal, etc. these assets will look different than what you see in VIZZIO renderer</li>
+            </ul>
+        </div>
+        <button id="cropBtn">Crop Range</button>
+        <p class="title"><img src="./public/icon_choice.png" alt="Format Icon">Format Selection</p>
+        <div class="format-selection">
+            <button disabled id="Export_obj">
+                <span class="progress-bar-obj"></span>
+                <span class="button-text">OBJ</span>
+            </button>
+            <button disabled id="Export_gltf">GLTF</button>
+            <button disabled id="Export_fbx">FBX</button>
+            <button disabled id="Export_ply">PLY</button>
+            <button disabled id="Export_3ds">3DS</button>
+            <button disabled id="Export_x">X</button>
+            <button disabled id="Export_stl">STL</button>
+        </div>
+        <p class="title"><img src="./public/icon_video.png" alt="Video Icon">Video Renders</p>
+        <div class="video-renders">
+            <button class="CreatNew">
+                <div class="textBtn">
+                    <span>+</span><br>
+                    Creat New Render
+                </div>
+            </button>    
+        </div>
+    </div>
+    <script>
+        // 获取进度元素
+        const loadingText = document.getElementById('loadingText');
+        const progressBar = document.getElementById('progressBar');
+
+        // 模拟动态更新
+        let progress = 40;
+        
+        // setInterval(() => {
+        //     progress += 10;
+        //     if (progress > 100) {
+        //         progress = 0;
+        //     }
+        //     ExportOBJProgress(progress)
+        // }, 2000);
+
+
+        function updataProgress(val){
+            loadingText.textContent = `Model calculating : ${val}`;
+            progressBar.style.width = `${val}`;
+        }
+
+        function NerfFinish(){
+            // 获取具有 class="loading-spinner" 的 div 元素
+            const loadingSpinner = document.querySelector('.loading-spinner');
+
+            // 隐藏元素
+            loadingSpinner.style.display = 'none';
+            loadingText.textContent = `Model calculating :Done`
+            progressBar.style.width = `100%`;
+        }
+
+        // Set ExprotOBJ进度
+        const ButtonOBJ = document.getElementById('Export_obj');
+        const ButtonPLY = document.getElementById('Export_ply');
+        const ButtonGLTF = document.getElementById('Export_gltf');
+        const ButtonFBX = document.getElementById('Export_fbx');
+        const Button3DS = document.getElementById('Export_3ds');
+        const ButtonX = document.getElementById('Export_x');
+        const ButtonSTL = document.getElementById('Export_stl');
+        const ExportOBJBar = document.querySelector('.progress-bar-obj');
+        function ExportOBJProgress(val){
+            ExportOBJBar.style.width = `${val}%`;
+            if (val === 100) {
+                ButtonOBJ.disabled = false;
+                ButtonPLY.disabled = false;
+            } else {
+                ButtonOBJ.disabled = true;
+                ButtonPLY.disabled = true;
+            }
+        }
+
+        // 如果OBJ和PLY转换完成
+        function ExportOBJFinish(){
+            ButtonOBJ.disabled = false;
+            ButtonPLY.disabled = false;
+        }
+
+        // 如果GLTF转换完成
+        function ExportGLTFFinish(){
+            ButtonGLTF.disabled = false;
+        }
+
+        // 如果FBX转换完成
+        function ExportFBXFinish(){
+            ButtonFBX.disabled = false;
+        }
+
+        // 如果3DS转换完成
+        function Export3DSFinish(){
+            Button3DS.disabled = false;
+        }
+
+        // 如果X转换完成
+        function ExportXFinish(){
+            ButtonX.disabled = false;
+        }
+
+        // 如果STL转换完成
+        function ExportSTLFinish(){
+            ButtonSTL.disabled = false;
+        }
+    </script>
+</body>
+</html>

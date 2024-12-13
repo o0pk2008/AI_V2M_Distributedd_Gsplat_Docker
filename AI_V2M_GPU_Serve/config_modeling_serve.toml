@@ -1,0 +1,35 @@
+title = "Server Config"
+
+[servers]
+
+[servers.upload_folder]
+http = "/source/object_server/AI_V2M_CloudStorage/uploads"
+base_path = "E:/Python/AI_V2M_Distributedd_Gsplat_Docker/AI_V2M_CloudStorage/uploads"
+
+[servers.updata_url]
+http = "http://192.168.2.94:5100/"
+
+[servers.edit_url]
+http = "http://192.168.2.94:5100/"
+
+[servers.GPU_Manager_url]
+http = "http://192.168.2.94:5200/"
+
+[servers.GPU_Manager_Port]
+port = 5200
+
+[servers.database]
+path = "sql/tasksData.db"
+
+[Client_Service]
+
+[Client_Service.url]
+http = "http://192.168.2.94:5000/"
+
+[cmd]
+[cmd.convert]
+command_Str_1 = "--colmap_executable=E:/Python/AI_V2M_Distributedd_Gsplat/AI_V2M_GPU_Serve/bin/COLMAP/COLMAP.bat"
+command_Str_2 = "--ffmpeg_executable=E:/Python/AI_V2M_Distributedd_Gsplat/AI_V2M_GPU_Serve/bin/ffmpeg.bat"
+
+colmap = "E:/Python/AI_V2M_Distributedd_Gsplat/AI_V2M_GPU_Serve/bin/COLMAP/"
+openMVS = "E:/Python/AI_V2M_Distributedd_Gsplat/AI_V2M_GPU_Serve/bin/openMVS/"

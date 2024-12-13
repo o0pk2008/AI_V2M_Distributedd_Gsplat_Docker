@@ -1,0 +1,11 @@
+#初始化环境
+docker run --gpus all -it -v E:\Python\AI_V2M_Distributedd_Gsplat_Docker:/source/object_server -p 5201:5201 nerfstudio:v5 /bin/bash
+
+#进入虚拟环境
+conda activate nerfstudio
+
+#进入路径
+cd /source/object_server/AI_V2M_GPU_Serve
+
+#启动服务
+python3 modeling_serve.py --port 5201

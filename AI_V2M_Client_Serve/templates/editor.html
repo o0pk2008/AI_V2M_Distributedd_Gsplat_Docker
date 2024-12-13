@@ -1,0 +1,79 @@
+<!-- 
+作者: Ning
+文件名: editor.html
+描述: 编辑页面。
+版本: 1.0.0
+最后修改日期: 2024-03-01
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captures Editor | VIZZIO.AI</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #iframeContainer {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #logo {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            z-index: 9999;
+            background-color: transparent;
+            /* pointer-events: none; 使Logo不影响点击事件 */
+            display: none;
+        }
+
+        @media (max-width: 460px) {
+            #logo img {
+                width: 200px; /* LOGO 缩小 */
+                height: 25px; /* LOGO 缩小 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="logo">
+        <a href="./">
+            <img src="./public/V_L.png" alt="Logo" width="256" height="32">
+        </a>
+    </div>
+    
+    <div id="iframeContainer">
+        <iframe id="embeddedPage" src="" frameborder="0" width="100%" height="100%"></iframe>
+    </div>
+
+    <script>
+
+        // 获取URL参数
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // 获取传入的URL地址
+        const embeddedUrl = getUrlParam('url');
+        if (embeddedUrl) {
+            document.getElementById('embeddedPage').src = embeddedUrl;
+        } else {
+            alert("未提供要嵌入的URL地址");
+        }
+
+    </script>
+</body>
+</html>

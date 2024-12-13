@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PolyView | AILAB</title>
+        <meta charset="utf-8" />
+        <base href="">
+        <link rel="manifest" href="./manifest.json">
+        <link rel="stylesheet" href="./index.css">
+        <link rel="shortcut icon" href="#">
+        <meta name="description" content="SuperSplat is an advanced browser-based editor for manipulating and optimizing 3D Gaussian Splats. It is open source and engine agnostic." />
+        <meta name="keywords" content="PLY, Gaussian, Splat, PlayCanvas, Editor" />
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://playcanvas.com/supersplat/editor" />
+        <meta property="og:title" content="SuperSplat" />
+        <meta property="og:description" content="SuperSplat is an advanced browser-based editor for manipulating and optimizing 3D Gaussian Splats. It is open source and engine agnostic." />
+        <meta property="og:image" content="https://playcanvas.com/supersplat/editor/static/images/header.webp" />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://playcanvas.com/supersplat/editor" />
+        <meta property="twitter:title" content="SuperSplat" />
+        <meta property="twitter:description" content="SuperSplat is an advanced browser-based editor for manipulating and optimizing 3D Gaussian Splats. It is open source and engine agnostic." />
+        <meta property="twitter:image" content="https://playcanvas.com/supersplat/editor/static/images/header.webp" />
+
+        <!-- Service worker -->
+        <script>
+            const sw = navigator.serviceWorker;
+            if (sw) {
+                sw.register('./sw.js')
+                    .then(reg => console.log('service worker registered', reg))
+                    .catch(err => console.log('failed to register service worker', err));
+            }
+        </script>
+    </head>
+
+    <body>
+        <script type="module" src="./index.js"></script>
+        <style>
+            /* 自定义 CSS 样式 */
+            .notification {
+                transition: transform 0.5s ease-in-out;
+            }
+        </style>
+        <!-- 顶部EditorLOGO -->
+        <div id="EditorLOGO" class="fixed justify-between top-0 w-full bg-white h-[80px] px-[54px] flex items-center z-10" style="display: none;">
+            <img src="./static/icons/V_L.png" class="h-10">
+            <div class="header-options">
+                <!-- 重置 -->
+                <div id="button-reset" class="header-options__btn btn-reset">
+                    <div class="header-options__btn-icon mask-icon"
+                        style="-webkit-mask-image: url(./static/icons/icon-reset.svg);mask-image: url(./static/icons/icon-reset.svg);">
+                    </div>
+                    <div class="header-options__btn-name">RESET</div>
+                </div>
+                <!-- 保存 -->
+                <div id="button-sync" class="header-options__btn btn-sync">
+                    <div class="header-options__btn-icon mask-icon"
+                        style="-webkit-mask-image: url(./static/icons/icon-sync.svg);mask-image: url(./static/icons/icon-sync.svg);">
+                    </div>
+                    <div class="header-options__btn-name">SYNC</div>
+                </div>
+            </div>
+        </div>
+        <!-- 侧边栏面板 -->
+        <div class="sidebar-panel-wrap" style="display: none;">
+            <!-- float panel -->
+            <div class="sidebar-panel fixed left-[55px] top-[140px] w-[244px] bg-white z-50 select-none shadow-lg">
+                <div class="sidebar-panel__body">
+                    <div class="sidebar-panel__unit">
+                        <div class="sidebar-panel__unit-hd">
+                            <img src="./static/icons/icon-selection.svg" alt="" class="sidebar-panel__unit-icon">
+                            <div class="sidebar-panel__unit-title">SELECTION</div>
+                        </div>
+                        <div class="sidebar-panel__unit-bd">
+                            <div id="button-rect" class="sidebar-panel__item">
+                                <div class="sidebar-panel__item-icon mask-icon"
+                                    style="-webkit-mask-image: url(./static/icons/icon-rect.svg);mask-image: url(./static/icons/icon-rect.svg);">
+                                </div>
+                                <div class="sidebar-panel__item-name">Rect</div>
+                            </div>
+                            <div id="button-brush" class="sidebar-panel__item">
+                                <div class="sidebar-panel__item-icon mask-icon"
+                                    style="-webkit-mask-image: url(./static/icons/icon-brush.svg);mask-image: url(./static/icons/icon-brush.svg);">
+                                </div>
+                                <div class="sidebar-panel__item-name">Brush</div>
+                            </div>
+                            <div id="button-polygon" class="sidebar-panel__item">
+                                <div class="sidebar-panel__item-icon mask-icon"
+                                    style="width:52px;height:52px;-webkit-mask-image: url(./static/icons/icon-polygon.svg);mask-image: url(./static/icons/icon-polygon.svg);">
+                                </div>
+                                <div class="sidebar-panel__item-name"
+                                    style="margin-top: 0px;transform: translateY(-2px);">Polygon</div>
+                            </div>
+                            <div id="button-sphere" class="sidebar-panel__item">
+                                <div class="sidebar-panel__item-icon mask-icon"
+                                    style="-webkit-mask-image: url(./static/icons/icon-sphere.svg);mask-image: url(./static/icons/icon-sphere.svg);">
+                                </div>
+                                <div class="sidebar-panel__item-name">Sphere</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sidebar-panel__unit">
+                        <div class="sidebar-panel__unit-hd">
+                            <img src="./static/icons/icon-scene_edit.svg" alt="" class="sidebar-panel__unit-icon">
+                            <div class="sidebar-panel__unit-title">SCENE EDIT</div>
+                        </div>
+                        <div class="sidebar-panel__unit-bd">
+                            <div id="button-origin" class="sidebar-panel__item">
+                                <div class="sidebar-panel__item-icon mask-icon"
+                                    style="-webkit-mask-image: url(./static/icons/icon-origin.svg);mask-image: url(./static/icons/icon-origin.svg);">
+                                </div>
+                                <div class="sidebar-panel__item-name" style="transform:translateY(2px);">Origin</div>
+                            </div>
+                            <div id="button-color" class="sidebar-panel__item">
+                                <div class="sidebar-panel__item-icon mask-icon"
+                                    style="width:45px;height:45px;-webkit-mask-image: url(./static/icons/icon-color.svg);mask-image: url(./static/icons/icon-color.svg);">
+                                </div>
+                                <div class="sidebar-panel__item-name">Color</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="sidebar-panel__unit">
+                        <div class="sidebar-panel__unit-hd">
+                            <img src="./static/icons/icon-save.svg" alt="" class="sidebar-panel__unit-icon">
+                            <div class="sidebar-panel__unit-title">SAVE</div>
+                        </div>
+                        <div class="sidebar-panel__unit-bd">
+                            <div id="button-sync" class="sidebar-panel__item">
+                                <div class="sidebar-panel__item-icon mask-icon"
+                                    style="width:56px;height:56px;-webkit-mask-image: url(./static/icons/icon-sync.svg);mask-image: url(./static/icons/icon-sync.svg);">
+                                </div>
+                                <div class="sidebar-panel__item-name" style="transform:translateY(-7px);">SYNC</div>
+                            </div>
+                            <div id="button-reset" class="sidebar-panel__item">
+                                <div class="sidebar-panel__item-icon mask-icon"
+                                    style="-webkit-mask-image: url(./static/icons/icon-reset.svg);mask-image: url(./static/icons/icon-reset.svg);">
+                                </div>
+                                <div class="sidebar-panel__item-name">RESET</div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="sidebar-panel__footer bg-[#6366F1] text-white">
+                    <div class="sidebar-panel__slider pt-[14px] pb-[16px] px-[20px]">
+                        <div class="sidebar-panel__slider-top flex flex-1 items-center justify-between w-full">
+                            <div class="sidebar-panel__slider-l flex items-center justify-between">
+                                <img src="./static/icons/icon-point-1.svg"
+                                    class="sidebar-panel__slider-icon shrink-0 w-[27px] h-[27px] mr-[6px]" alt="">
+                                <div class="sidebar-panel__slider-name fz-[16px] leading-5">Point Size</div>
+                            </div>
+                            <div id="panel-slider-value"
+                                class="sidebar-panel__slider-r flex items-center justify-center w-[38px] h-[18px] border border-[rgba(255,255,255,0.5)]">
+                                0.00</div>
+                        </div>
+                        <div class="sidebar-panel__slider-bottom mt-[12px]">
+                            <div id="panel-slider" class="sidebar-panel__slider-bar">
+                                <input id="slider-input-range" type="range" min="0" max="10" step="0.01" value="0">
+                            </div>
+                            <!-- 模式切换 -->
+                            <div id="mode-switch" class="mode-switch flex items-center justify-center border border-white mt-4">
+                                <div id="point-mode" class="mode-switch__item is-active">
+                                    <img class="mode-switch__item-icon" src="./static/icons/icon-point.svg" alt="">
+                                    <img class="mode-switch__item-icon-active" src="./static/icons/icon-point-active.svg" alt="">
+                                    <div class="mode-switch__item-name">Point</div>
+                                </div>
+                                <div id="ring-mode" class="mode-switch__item">
+                                    <img class="mode-switch__item-icon" src="./static/icons/icon-ring.svg" alt="">
+                                    <img class="mode-switch__item-icon-active" src="./static/icons/icon-ring-active.svg" alt="">
+                                    <div class="mode-switch__item-name">Ring</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 面板二级菜单 -->
+            <div class="sidebar-panel__second fixed left-[50%] bottom-[104px] translate-x-[-50%] z-40">
+                <!-- second menu -->
+                <div id="panel-menu" class="sidebar-panel__menu">
+                    <div class="sidebar-panel__menu-left cursor-move">
+                        <div id="panel-menu-icon" class="sidebar-panel__menu-icon mask-icon"
+                            style="-webkit-mask-image: url('./static/icons/icon-rect.svg');mask-image: url('./static/icons/icon-rect.svg');">
+                        </div>
+                        <div id="panel-menu-name" class="sidebar-panel__menu-name">Rect</div>
+                    </div>
+                    <div class="sidebar-panel__menu-right">
+                        <div class="sidebar-panel__menu-hd">
+                            <img src="./static/icons/icon-save.svg" alt="" class="sidebar-panel__menu-detail">
+                            <div class="sidebar-panel__menu-title">DETAL</div>
+                        </div>
+                        <div class="sidebar-panel__menu-bd">
+                            <!-- boxs plane -->
+                            <div id="boxs-plane" class="sidebar-panel__boxs plane">
+                                <div class="sidebar-panel__box">
+                                    <span class="sidebar-panel__box-name">Y</span>
+                                </div>
+                                <div id="plane-input-box" class="sidebar-panel__box box-long">
+                                    <!-- <input id="menu-plane-input" type="number" class="sidebar-panel__box-input" value="0.00"> -->
+                                </div>
+                            </div>
+                            <!-- box set / none / invert / delete -->
+                            <div id="boxs-section" class="sidebar-panel__boxs rect brush polygon">
+                                <div id="menu-set" class="sidebar-panel__box">
+                                    <img src="./static/icons/icon-set.svg" alt="" class="sidebar-panel__box-icon">
+                                    <span class="sidebar-panel__box-name">Set</span>
+                                </div>
+                                <div id="menu-none" class="sidebar-panel__box">
+                                    <img src="./static/icons/icon-none.svg" alt=""
+                                        class="sidebar-panel__box-icon">
+                                    <span class="sidebar-panel__box-name">None</span>
+                                </div>
+                                <div id="menu-invert" class="sidebar-panel__box">
+                                    <img src="./static/icons/icon-invert.svg" alt=""
+                                        class="sidebar-panel__box-icon">
+                                    <span class="sidebar-panel__box-name">Invert</span>
+                                </div>
+                                <div id="menu-delete" class="sidebar-panel__box">
+                                    <img src="./static/icons/icon-delete.svg" alt=""
+                                        class="sidebar-panel__box-icon">
+                                    <span class="sidebar-panel__box-name">Delete</span>
+                                </div>
+                            </div>
+                            <!-- box sphere -->
+                            <div id="boxs-shpere" class="sidebar-panel__boxs sphere">
+                                <!-- sphere set -->
+                                <div id="menu-sphere-set" class="sidebar-panel__box">
+                                    <img src="./static/icons/icon-set.svg" alt="" class="sidebar-panel__box-icon">
+                                    <span class="sidebar-panel__box-name">Set</span>
+                                </div>
+                                <!-- sphere invert -->
+                                <div id="menu-sphere-invert" class="sidebar-panel__box">
+                                    <img src="./static/icons/icon-invert.svg" alt=""
+                                        class="sidebar-panel__box-icon">
+                                    <span class="sidebar-panel__box-name">Invert</span>
+                                </div>
+                                <!-- sphere remove -->
+                                <div id="menu-sphere-remove" class="sidebar-panel__box">
+                                    <img src="./static/icons/icon-delete.svg" alt=""
+                                        class="sidebar-panel__box-icon">
+                                    <span class="sidebar-panel__box-name">Delete</span>
+                                </div>
+                                <!-- sphere radius -->
+                                <div id="menu-sphere-radius" class="sidebar-panel__box"></div>
+                            </div>
+                            <!-- boxs origin position-->
+                            <div id="box-position" class="sidebar-panel__boxs origin">
+                                <div class="sidebar-panel__box box-label">
+                                    <span class="sidebar-panel__box-name">Position</span>
+                                </div>
+                                <!-- 
+                                    <div class="sidebar-panel__boxinput">
+                                        <div class="sidebar-panel__boxinput-key">X</div>
+                                        <input id="origin-pos-x" type="number" class="sidebar-panel__boxinput-input" value="0.00">
+                                    </div>
+                                    <div class="sidebar-panel__boxinput">
+                                        <div class="sidebar-panel__boxinput-key">Y</div>
+                                        <input id="origin-pos-y" type="number" class="sidebar-panel__boxinput-input" value="0.00">
+                                    </div>
+                                    <div class="sidebar-panel__boxinput">
+                                        <div class="sidebar-panel__boxinput-key">Z</div>
+                                        <input id="origin-pos-z" type="number" class="sidebar-panel__boxinput-input" value="0.00">
+                                    </div> -->
+                            </div>
+                            <!-- boxs origin rotation-->
+                            <div id="box-rotation" class="sidebar-panel__boxs origin">
+                                <div class="sidebar-panel__box box-label">
+                                    <span class="sidebar-panel__box-name">Rotation</span>
+                                </div>
+                                <!-- 
+                                    <div class="sidebar-panel__boxinput">
+                                        <div class="sidebar-panel__boxinput-key">X</div>
+                                        <input id="origin-rot-x" type="number" class="sidebar-panel__boxinput-input" value="0.00">
+                                    </div>
+                                    <div class="sidebar-panel__boxinput">
+                                        <div class="sidebar-panel__boxinput-key">Y</div>
+                                        <input id="origin-rot-y" type="number" class="sidebar-panel__boxinput-input" value="0.00">
+                                    </div>
+                                    <div class="sidebar-panel__boxinput">
+                                        <div class="sidebar-panel__boxinput-key">Z</div>
+                                        <input id="origin-rot-z" type="number" class="sidebar-panel__boxinput-input" value="0.00">
+                                    </div> -->
+                            </div>
+                            <!-- boxs origin scale-->
+                            <div id="box-scale" class="sidebar-panel__boxs origin">
+                                <div class="sidebar-panel__box box-label">
+                                    <span class="sidebar-panel__box-name">Scale</span>
+                                </div>
+                                <div id="origin-scale-box" class="sidebar-panel__box box-long">
+                                    <!-- <input id="origin-scale" type="number" class="sidebar-panel__box-input center" value="1.00"> -->
+                                </div>
+                            </div>
+                            <!-- boxs color -->
+                            <div id="box-color" class="sidebar-panel__boxs color">
+                                <div class="sidebar-panel__box box-label">
+                                    <span class="sidebar-panel__box-name">Color</span>
+                                </div>
+                                <div id="menu-color-box" class="sidebar-panel__box box-long relative">
+                                    <div id="menu-color-label"
+                                        class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center text-white text-[15px] z-50 pointer-events-none">
+                                        #000000
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 通知窗口 -->
+        <div id="notification"
+            class="notification fixed hidden top-[80px] w-full bg-[#6366F1] text-white px-4 py-2 transform -translate-y-full transition-transform duration-500 text-center">
+            This is a notification!
+        </div>
+    </body>
+</html>

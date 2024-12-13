@@ -1,0 +1,282 @@
+.create1 {
+  position: relative;
+  line-height: 33.6px;
+  display: inline-block;
+  width: 153px;
+  flex-shrink: 0;
+  z-index: 0;
+}
+.icon1,
+.x-close1 {
+  position: absolute;
+  overflow: hidden;
+}
+.icon1 {
+  height: 50%;
+  width: 50%;
+  top: 25%;
+  right: 25%;
+  bottom: 25%;
+  left: 25%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+.x-close1 {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  margin: 0 !important;
+  top: 5px;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.grouphead1 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  gap: 569px;
+}
+.frame-video {
+  position: relative;
+  width: 350px;
+  height: 392px;
+  background-color: #000;
+}
+.buttonupdata-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000;
+  width: 350px;
+  height: 44px;
+}
+.div6 {
+  position: absolute;
+  top: 10px;
+  left: 152px;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: Inter;
+  color: #fff;
+  text-align: center;
+}
+.buttonupdata {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  position: absolute;
+  top: 38px;
+  left: 0;
+  width: 350px;
+  height: 44px;
+}
+.div7 {
+  position: absolute;
+  top: 2px;
+  left: 34px;
+  font-weight: 500;
+}
+.check-square-broken,
+.frame-checkbox-01 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 24px;
+}
+.check-square-broken {
+  margin: 0;
+  width: 24px;
+  overflow: hidden;
+}
+.frame-checkbox-01 {
+  width: 98px;
+}
+.buttonupdata-parent {
+  top: 305px;
+  width: 350px;
+  height: 82px;
+}
+.buttonupdata-parent,
+.div8,
+.group {
+  position: absolute;
+  left: 0;
+}
+.group {
+  top: 32px;
+  background-color: #fff;
+  border: 1px solid #b4b4b4;
+  box-sizing: border-box;
+  width: 350px;
+  height: 47px;
+  padding: 12px 14px;
+  font-family: Inter;
+  font-size: 16px;
+  color: #000;
+}
+.div8 {
+  top: 1px;
+  font-weight: 500;
+}
+.help-circle-icon {
+  position: absolute;
+  top: 0;
+  left: 38px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  object-fit: cover;
+}
+.frame-public,
+.frame-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 58px;
+  height: 20px;
+}
+.frame-public {
+  top: 182px;
+  width: 350px;
+  height: 79px;
+}
+.frame-title1,
+.help-circle-icon1 {
+  position: absolute;
+  top: 0;
+  height: 20px;
+}
+.help-circle-icon1 {
+  left: 69px;
+  width: 20px;
+  overflow: hidden;
+  object-fit: cover;
+}
+.frame-title1 {
+  left: 0;
+  width: 89px;
+}
+.frame-camera-type,
+.frame-child {
+  position: absolute;
+  top: 90px;
+  left: 0;
+  width: 350px;
+  height: 79px;
+}
+.frame-child {
+  top: 0;
+  background-color: #fff;
+  border: 1px solid #b4b4b4;
+  box-sizing: border-box;
+  height: 47px;
+}
+.flag-05-icon,
+.input {
+  position: absolute;
+  top: 12px;
+}
+.input {
+  border: 0;
+  outline: 0;
+  font-family: Inter;
+  font-size: 16px;
+  background-color: transparent;
+  left: 14px;
+  color: #000;
+  text-align: left;
+  display: inline-block;
+  width: 305px;
+  height: 23px;
+}
+.flag-05-icon {
+  left: 319px;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  object-fit: cover;
+}
+.rectangle-parent {
+  position: absolute;
+  top: 31px;
+  left: 0;
+  width: 283px;
+  height: 47px;
+}
+.div10,
+.frame-title2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 350px;
+}
+.div10 {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+.frame-title2 {
+  height: 78px;
+}
+.frame-parent {
+  position: relative;
+  width: 350px;
+  height: 387px;
+}
+.frame-create2,
+.frame-video-parent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frame-video-parent {
+  align-self: stretch;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 40px;
+  font-size: 16px;
+}
+.frame-create2 {
+  position: relative;
+  background-color: #fff;
+  width: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  gap: 25px;
+  text-align: left;
+  font-size: 24px;
+  color: #000;
+  font-family: Inter;
+}
+@media screen and (max-width: 790px) {
+  .frame-video {
+    display: none;
+  }
+  .frame-camera-type,
+  .frame-child {
+    width:280px;
+  }
+  .group {
+    width:280px;
+  }
+  .div6 {
+    left: 120px;
+  }
+  .buttonupdata {
+    width:280px;
+  }
+  .buttonupdata-child {
+    width:280px;
+  }
+}

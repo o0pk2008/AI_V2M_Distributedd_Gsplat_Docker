@@ -1,0 +1,108 @@
+<!-- 
+作者: Ning
+文件名: FrameCreator.html
+描述: 视频预览和信息填写页面。
+版本: 1.0.0
+最后修改日期: 2024-01-19
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <link rel="stylesheet" href="./FrameManager.css" />
+    <link
+      rel="stylesheet"
+      href="./googleapis.css"
+    />
+  </head>
+  <body>
+    <div class="frame-create2">
+      <div class="grouphead1">
+        <b class="create1">创作 / Create </b>
+        <button class="x-close1">
+          <img class="icon1" alt="" src="./public/icon@2x.png" />
+        </button>
+      </div>
+      <div class="frame-video-parent">
+        <video class="frame-video" controls>
+          <source src />
+        </video>
+        <div class="frame-parent">
+          <div class="buttonupdata-parent">
+            <button class="buttonupdata">
+              <div class="buttonupdata-child"></div>
+              <div class="div6">上 传</div>
+            </button>
+            <div class="frame-checkbox-01">
+              <div class="div7">清理碎片</div>
+              <input class="check-square-broken" type="checkbox" />
+            </div>
+          </div>
+          <div class="frame-public">
+            <select class="group userprivacy">
+              <option value="0">私有的</option>
+              <option value="1">公开的</option>
+            </select>
+            <div class="frame-title">
+              <div class="div8">隐私</div>
+              <img
+                class="help-circle-icon"
+                alt=""
+                src="./public/helpcircle@2x.png"
+              />
+            </div>
+          </div>
+          <div class="frame-camera-type">
+            <select class="group">
+              <option value="type_01">普通的</option>
+              <option value="type_02">鱼眼</option>
+            </select>
+            <div class="frame-title1">
+              <div class="div8">相机类型</div>
+              <img
+                class="help-circle-icon1"
+                alt=""
+                src="./public/helpcircle@2x.png"
+              />
+            </div>
+          </div>
+          <div class="frame-title2">
+            <div class="rectangle-parent">
+              <div class="frame-child"></div>
+              <input
+                class="input input_title"
+                placeholder="为你创作的场景添加标题"
+                type="text"
+                oninput="restrictInput()"
+              />
+
+              <img class="flag-05-icon" alt="" src="./public/flag05@2x.png" />
+            </div>
+            <div class="div10">标题</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    function restrictInput() {
+      // 获取输入框元素
+      var inputElement = document.getElementsByClassName('input')[0];
+
+      // 获取输入框的值
+      var inputValue = inputElement.value;
+
+      // 使用正则表达式验证输入，只保留数字、大小写字母和中文字
+      var restrictedValue = inputValue.replace(/[^\w\u4e00-\u9fa5]/g, '');
+
+      // 限制输入长度不超过100个字符
+      restrictedValue = restrictedValue.substring(0, 100);
+
+      // 更新输入框的值
+      inputElement.value = restrictedValue;
+    }
+  </script>
+</html>

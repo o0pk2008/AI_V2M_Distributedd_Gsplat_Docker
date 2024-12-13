@@ -1,0 +1,115 @@
+.thumbnail:hover:not(.calculating) .thumbnail-buttons {
+    opacity: 1;
+}
+
+.calculating .thumbnail-link {
+    pointer-events: none;
+}
+
+.calculating .thumbnail-buttons {
+    opacity: 0;
+}
+
+.calculating .progress-indicator {
+    display: flex;
+}
+
+.calculating img {
+    filter: blur(2px) brightness(0.6);
+    /* 添加模糊和变暗效果 */
+
+}
+
+.progress-circle {
+    border: 4px solid #ffffff;
+    border-top-color: #00ffff;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 2s linear infinite;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 初始时隐藏弹出层 */
+#popup_main {
+    width: 81%;
+    /* 设置宽度为父元素宽度的 80% */
+    height: 80%;
+    /* 设置高度为父元素高度的 60% */
+    max-width: 800px;
+    /* 设置最大宽度 */
+    min-width: 300px;
+    /* 设置最小宽度 */
+    max-height: 500px;
+    /* 设置最大高度 */
+    min-height: 424px;
+    /* 设置最小高度 */
+    overflow: hidden;
+    /* 隐藏滚动条 */
+    position: relative;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 0px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    /* 初始为透明 */
+    opacity: 0;
+    /* 设置过度动画 */
+    animation: fade-in-out-animation 0.5s ease-in-out 1 forwards;
+  }
+  
+  /* 渐显过度动画 */
+  @keyframes fade-in-out-animation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    /* 去掉边框 */
+    transform-origin: top left;
+    /* 设置缩放变换的原点 */
+  }
+
+  /* 在屏幕宽度小于某个值时,隐藏 Logo 2 和 Logo 3 */
+@media (max-width: 768px) {
+
+    .logos img:not(:first-child),
+    .logos div {
+        display: none;
+    }
+
+    .logos {
+        margin-right: 20px;
+    }
+
+    #popup_main {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+    }
+}

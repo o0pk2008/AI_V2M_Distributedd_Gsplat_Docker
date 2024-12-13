@@ -1,0 +1,863 @@
+<!-- 
+作者: Ning
+文件名: CropTools.html
+描述: 编辑页面。
+版本: 1.0.1
+最后修改日期: 2024-12-13
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export model | VIZZIO.AI</title>
+    <!-- <link href="./tailwind/tailwind.min.css" rel="stylesheet"> -->
+    <script src="./tailwind/feather.min.js"></script>
+    <script src="./tailwind/tailwind.js"></script>
+    <style>
+        #iframeContainer {
+            position: fixed;
+            top: 4rem;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- 3D视图 -->
+    <div id="iframeContainer">
+        <iframe id="embeddedPage" src="" frameborder="0" width="100%" height="100%" scrolling="no"></iframe>
+    </div>
+    <!-- 顶部模块 -->
+    <div class="shadow-md p-3 flex justify-between items-center h-16">
+        <div class="flex items-center h-full">
+            <div class="logos flex items-center space-x-4">
+                <img src="./img/icon_vizzio.png" alt="Logo 1" class="h-8 mr-2 object-contain">
+                <!-- <img src="./img/icon_ailab.png" alt="Logo 2" class="h-8 mr-2"> -->
+                <!-- <div class="flex items-center space-x-2">
+                    <img src="./img/icon_v2m.png" alt="Logo 3" class="h-8">
+                    <p class="text-s">Media Scan 3D</p>
+                </div> -->
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke="#000000"
+                        stroke-width="2" class="w-6 h-6 ml-3">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m27 9.375-2.8125-1.64062M27 9.375v2.8125m0-2.8125-2.8125 1.64062M3.75 9.375l2.8125-1.64062M3.75 9.375l2.8125 1.64062M3.75 9.375v2.8125m11.25 3.75 2.8125-1.64062M15 15l-2.8125-1.64062M15 15V18m0 8.4375 2.8125-1.64062M15 27V24m0 3-2.8125-1.64062m0-21L15 3l2.8125 1.64062M27 18v2.8125l-2.8125 1.64062m-16.875 0L3.75 21v-2.8125" />
+                    </svg>
+                    <div class="font-bold">Export model</div>
+                </div>
+
+            </div>
+        </div>
+        <!-- <div class="flex justify-end h-full">
+            <button id="Btn_Back"
+                class="bg-green-500 hover:bg-green-600 text-white text-sm py-2 px-4 rounded ml-2">Back</button>
+        </div> -->
+        <div class="flex justify-end h-full">
+            <button id="Share" class="flex hover:bg-gray-200 text-black text-sm py-2 px-4 rounded ml-2">
+                <i data-feather="share" alt="User Avatar" class="h-5 w-5 pt-1"></i>
+                <p class="py-0.5 pl-1">Share</p>
+            </button>
+            <button id="Download" class="flex hover:bg-gray-200 text-black text-sm py-2 px-4 rounded ml-2">
+                <i data-feather="download" alt="User Avatar" class="h-5 w-5 pt-1"></i>
+                <p class="py-0.5 pl-1">Download</p>
+            </button>
+        </div>
+    </div>
+
+    <!-- 弹出面板 -->
+    <div id="dialog_down" class="relative z-10" role="dialog" aria-modal="true">
+
+        <div class="fixed inset-0 hidden bg-gray-500 bg-opacity-75 transition-opacity md:block"></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
+
+                <div
+                    class="flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl">
+                    <div
+                        class="relative flex w-full items-center overflow-hidden bg-white px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
+                        <button type="button" id="closeButton"
+                            class="absolute right-4 top-4 text-gray-400 hover:text-gray-500 sm:right-6 sm:top-8 md:right-6 md:top-6 lg:right-8 lg:top-8">
+                            <span class="sr-only">Close</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+
+                        <div class="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
+                            <div
+                                class="aspect-h-3 aspect-w-2 w-full h-full overflow-hidden rounded-lg bg-gray-100 sm:col-span-4 lg:col-span-5">
+                                <img src="./img/300x200.png"
+                                    class="w-full h-full object-cover object-center previewImg">
+                            </div>
+                            <div class="sm:col-span-8 lg:col-span-7">
+                                <h2 class="text-2xl font-bold text-gray-900 sm:pr-12">Downloads</h2>
+
+                                <section aria-labelledby="options-heading" class="mt-10">
+                                    <!-- note -->
+                                    <div class="text-sm">
+                                        <ul class="list-disc">
+                                            <li>Exported 3D files do not currently carry view depentent effects, like
+                                                reflections</li>
+                                            <li>When imported into 3D software, like Blender, Unreal, etc. these assets
+                                                will look different than what you see in VIZZIO renderer</li>
+                                        </ul>
+                                    </div>
+                                    <!-- Object -->
+                                    <div class="mt-10">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-2">
+                                                <h4 class="text-sm font-bold text-gray-900">Object</h4>
+                                                <!-- 进度条部分 -->
+                                                <div id="Nerfprogress" class="flex items-center space-x-2 hidden">
+                                                    <span class="text-sm font-bold text-gray-900">Calculating</span>
+                                                    <div class="relative w-[305px]">
+                                                        <div class="bg-gray-200 rounded-full h-3 dark:bg-gray-500">
+                                                            <div id="progressBar" class="bg-indigo-600 h-3 rounded-full" style="width: 0%"></div>
+                                                        </div>
+                                                        <span id="loadingText" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[8px] text-white">0%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <fieldset class="mt-4">
+                                            <div class="relative">
+                                                <!-- 添加计算确认遮罩层 -->
+                                                <div id="confirmationOverlay" 
+                                                    class="absolute -inset-2.5 bg-white/25 backdrop-blur-sm flex flex-col items-center justify-center hidden">
+                                                    <div class="text-sm font-bold text-gray-900 mb-6">
+                                                        Is it necessary to convert the model format?
+                                                    </div>
+                                                    <button id="calculateButton" 
+                                                        class="bg-indigo-500 hover:bg-indigo-600 text-white text-sm px-6 py-3 rounded-full shadow-md transition-all">
+                                                        Calculate now
+                                                    </button>
+                                                </div>
+
+                                                <div class="grid grid-cols-4 gap-4">
+                                                    <button id="Export_obj" disabled
+                                                        class="bg-indigo-500 hover:bg-indigo-700 text-white text-sm border py-3 px-4 rounded w-full disabled:bg-gray-200 disabled:hover:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">OBJ
+                                                    </button>
+                                                    <button id="Export_ply" disabled
+                                                        class="bg-indigo-500 hover:bg-indigo-700 text-white text-sm border py-3 px-4 rounded w-full disabled:bg-gray-200 disabled:hover:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">PLY
+                                                    </button>
+                                                    <button id="Export_gltf" disabled
+                                                        class="bg-indigo-500 hover:bg-indigo-700 text-white text-sm border py-3 px-4 rounded w-full disabled:bg-gray-200 disabled:hover:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">GLTF
+                                                    </button>
+                                                    <button id="Export_fbx" disabled
+                                                        class="bg-indigo-500 hover:bg-indigo-700 text-white text-sm border py-3 px-4 rounded w-full disabled:bg-gray-200 disabled:hover:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">FBX
+                                                    </button>
+                                                    <button id="Export_3ds" disabled
+                                                        class="bg-indigo-500 hover:bg-indigo-700 text-white text-sm border py-3 px-4 rounded w-full disabled:bg-gray-200 disabled:hover:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">3DS
+                                                    </button>
+                                                    <button id="Export_x" disabled
+                                                        class="bg-indigo-500 hover:bg-indigo-700 text-white text-sm border py-3 px-4 rounded w-full disabled:bg-gray-200 disabled:hover:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">X
+                                                    </button>
+                                                    <button id="Export_stl" disabled
+                                                        class="bg-indigo-500 hover:bg-indigo-700 text-white text-sm border py-3 px-4 rounded w-full disabled:bg-gray-200 disabled:hover:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">STL
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+
+                                    <!-- Scene -->
+                                    <div class="mt-10">
+                                        <div class="flex items-center justify-between">
+                                            <h4 class="text-sm font-bold text-gray-900">Scene</h4>
+                                        </div>
+
+                                        <fieldset class="mt-4">
+                                            <div class="grid grid-cols-4 gap-4">
+                                                <button id="Export_PointCloud" disabled
+                                                    class="bg-indigo-500 hover:bg-indigo-700 text-white text-xs border py-3 px-4 rounded w-full disabled:bg-gray-200 disabled:hover:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">Point
+                                                    Cloud
+                                                </button>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /弹出面板 -->
+
+    <script>
+
+        // 全局变量
+        let idKey;
+        let ClientServer_URL;
+        let updata_http;
+        // 声明一个全局变量来存储 setTimeout 返回的标识符
+        let timerId;
+        // 弹窗关闭按钮
+        let closeButton;
+        // Nerf计算进度显示元素
+        let Nerfdialog;
+        // 提示确认计算层元素
+        let confirmationDialog;
+        // 确认计算按钮
+        let calculateButton;
+
+        // 获取URL参数
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // 获取传入的URL地址
+        const embeddedUrl = getUrlParam('url');
+        if (embeddedUrl) {
+            // document.getElementById('embeddedPage').src = embeddedUrl;
+
+            // 创建 URL 对象
+            let url = new URL(embeddedUrl);
+            // 使用 URLSearchParams 获取参数
+            let params = new URLSearchParams(url.search);
+            idKey = params.get('idkey');
+            ClientServer_URL = params.get('serveIP');
+            updata_http = params.get('updata_http');
+
+            // 获取图片元素
+            var previewImg = document.getElementsByClassName('previewImg')[0];
+
+            // 设置新的图像源路径 20240426
+            previewImg.setAttribute('src', updata_http + "uploads/" + idKey + "/sfm/images_4/frame_00001.png");
+
+            // 判断point_cloud.ply是否完成
+            Get_SQLData_NeRF_FinishByID(idKey);
+
+            // 请求Nerf 进度
+            // Get_SQLData_NeRF_ProgressByID(idKey);
+
+        } else {
+            alert("未提供要嵌入的URL地址");
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            feather.replace();
+
+            // 获取关闭按钮和弹出面板元素
+            const downloadButton = document.getElementById('Download');
+            closeButton = document.getElementById('closeButton');
+            const dialog_down = document.getElementById('dialog_down');
+
+            // 获取确认层计算按钮
+            calculateButton = document.getElementById('calculateButton');
+
+            // 获取Nerf计算进度显示元素
+            Nerfdialog = document.getElementById('Nerfprogress');
+            // 获取提示确认计算层元素
+            confirmationDialog = document.getElementById('confirmationOverlay');
+            
+            // 点击计算按钮时
+            calculateButton.addEventListener('click', () => {
+                // 禁用计算按钮
+                calculateButton.disabled = true;
+
+                // 这里添加开始计算的逻辑
+                RequestNerfCalculation(idKey)
+                    .then(result => {
+                        console.log('Nerf计算请求成功:', result);
+                        // 修改计算按钮文本
+                        calculateButton.textContent = 'Task Request';
+                        // 更新Nerf状态为等待计算
+                        updataNerfactoProgress(idKey);
+                        // 隐藏确认计算层
+                        confirmationDialog.classList.add('hidden');
+                        // 请求Nerf 进度
+                        timerId = setTimeout(() => Get_SQLData_NeRF_ProgressByID(idKey), 2000);
+                    })
+                    .catch(error => {
+                        console.error('Nerf计算请求失败:', error);
+                        calculateButton.textContent = 'Request failed';
+                    });
+            });
+
+            // 添加点击事件处理程序
+            closeButton.addEventListener('click', () => {
+                // 隐藏弹出面板
+                dialog_down.style.display = 'none';
+            });
+
+            // 添加点击事件处理程序
+            downloadButton.addEventListener('click', () => {
+                // OtherTpye计算状态检测-修改按钮状态
+                GetExportClassBtn(idKey);
+
+                // OBJ计算状态检测-修改按钮状态
+                Get_SQLData_OBJ_ByID(idKey);
+
+                // 显示弹出面板
+                dialog_down.style.display = 'block';
+            });
+
+            // OtherTpye计算状态检测-修改按钮状态
+            GetExportClassBtn(idKey);
+
+            // OBJ计算状态检测-修改按钮状态
+            Get_SQLData_OBJ_ByID(idKey);
+
+        })
+
+        // 检查模型计算进度
+        // 根据ID请求本地数据库上的OBJ转换状态
+        function Get_SQLData_OBJ_ByID(ID) {
+            // 指定API的URL
+            const apiUrl = ClientServer_URL + "get_ExportOBJByID";
+
+            // 构建包含ID参数的请求体
+            const requestBody = {
+                id: ID,
+            };
+
+            // 使用Fetch API进行POST请求
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            })
+                .then(response => {
+                    // 检查请求是否成功
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.status}`);
+                    }
+                    // 将响应解析为JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // 解析message字段中的JSON字符串
+                    var messageObject = JSON.parse(data.message);
+
+                    // 处理获取到的数据
+                    if (data.status === 'success') {
+                        const finish = messageObject.export_obj_state;
+                        let Button_exportOBJ = document.getElementById('Export_obj');
+                        let Button_export_ply = document.getElementById('Export_ply');
+
+                        // 判断当前任务完成
+                        if (finish) {
+                            // 将OBJ按钮设为可用状态
+                            Button_exportOBJ.disabled = false;
+
+                            // 下载OBJ模型事件
+                            if (Button_exportOBJ) {
+                                Button_exportOBJ.addEventListener('click', () => {
+                                    // 设置按钮的链接和下载属性
+                                    let fileUrl = updata_http + "uploads/" + ID + "/OBJ_" + ID + ".zip";
+                                    let a = document.createElement('a');
+                                    a.href = fileUrl;
+                                    a.download = 'file.pdf'; // 设置下载的文件名
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                });
+                            }
+
+                            // 将PLY按钮设为可用状态
+                            Button_export_ply.disabled = false;
+
+                            // 下载PLY模型事件
+                            if (Button_export_ply) {
+                                Button_export_ply.addEventListener('click', () => {
+                                    // 设置按钮的链接和下载属性
+                                    let fileUrl = updata_http + "uploads/" + ID + "/mesh/poisson_mesh.ply";
+                                    let a = document.createElement('a');
+                                    a.href = fileUrl;
+                                    a.download = 'file.pdf'; // 设置下载的文件名
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                });
+                            }
+                            
+                            // 有OBJ模型，加载渲染点云视图
+                            // 加载点云渲染视图
+                            if (embeddedUrl) {
+                                // 判断是否已经加载了相同的 URL
+                                if (embeddedPage.src !== embeddedUrl) {
+                                    embeddedPage.src = embeddedUrl;
+
+                                    // 加载等待时显示进度
+                                    loadingText.textContent = '100%';
+                                    progressBar.style.width = '100%';
+
+                                    // 等待iframe加载完毕
+                                    embeddedPage.onload = function () {
+                                    };
+                                } else {
+                                    console.log("The embedded page is already loaded with the same URL.");
+                                }
+                            }
+
+
+                            return true;
+                        } else {
+                            // 如果没有OBJ模型，请求Nerf 进度
+                            Get_SQLData_NeRF_ProgressByID(idKey);
+                            return false;
+                        }
+                    } else {
+                        // 处理服务器返回的错误消息
+                        console.error('Server error:', data.message);
+                        return false;
+                    }
+                })
+                .catch(error => {
+                    // 处理错误
+                    console.error('Fetch error:', error);
+                    return false;
+                });
+        }
+
+        // 根据ID请求本地数据库上的NeRF训练进度
+        function Get_SQLData_NeRF_ProgressByID(ID) {
+
+            // 指定API的URL
+            const apiUrl = ClientServer_URL + "get_NerfByID";
+
+            // 构建包含ID参数的请求体
+            const requestBody = {
+                id: ID,
+            };
+
+            // 使用Fetch API进行POST请求
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            })
+                .then(response => {
+                    // 检查请求是否成功
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.status}`);
+                    }
+                    // 将响应解析为JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // 解析message字段中的JSON字符串
+                    var messageObject = JSON.parse(data.message);
+
+                    // 处理获取到的数据
+                    if (data.status === 'success') {
+                        const progress = messageObject.nerfacto_progress;
+                        const finish = messageObject.nerfacto_status;
+                        let embeddedPage = document.getElementById('embeddedPage');
+
+                        // 获取进度元素
+                        const loadingText = document.getElementById('loadingText');
+                        const progressBar = document.getElementById('progressBar');
+
+                        // 判断当前任务训练是否完成
+                        if (finish) {
+                            // 停止轮询
+                            // 加载点云渲染视图
+                            if (embeddedUrl) {
+                                embeddedPage.src = embeddedUrl;
+                                // 加载等待时显示进度
+                                loadingText.textContent = `${'100%'}`;
+                                progressBar.style.width = `${'100%'}`;
+
+                                // 等待iframe加载完毕
+                                embeddedPage.onload = function () {
+
+                                // 隐藏进度条部分
+                                Nerfdialog.style.display = 'none';
+
+                                // 显示弹窗关闭按钮
+                                closeButton.style.display = 'block';
+
+                                // 隐藏弹出面板
+                                dialog_down.style.display = 'none';
+
+                                }
+                            }
+
+                        } else {
+                            // 隐藏弹窗关闭按钮
+                            closeButton.style.display = 'none';
+                            
+                            // 获取计算进度
+                            if (progress != null && progress != 0) {
+                                loadingText.textContent = `${progress}`;
+                                progressBar.style.width = `${progress}`;
+                                // 显示进度条部分
+                                Nerfdialog.style.display = 'flex';
+                                // 设置计时器并将标识符存储在 timerId 中
+                                timerId = setTimeout(() => Get_SQLData_NeRF_ProgressByID(ID), 2000);
+                            } else {
+                                // 隐藏进度条部分
+                                Nerfdialog.style.display = 'none';
+                                // 显示确认计算层
+                                confirmationDialog.classList.remove('hidden');
+                            }
+                        }
+                    } else {
+                        // 处理服务器返回的错误消息
+                        console.error('Server error:', data.message);
+                    }
+                })
+                .catch(error => {
+                    // 处理错误
+                    console.error('Fetch error:', error);
+                });
+
+        }
+
+        // 发送nerf计算事件到分发路由
+        function RequestNerfCalculation(ID) {
+            return new Promise((resolve, reject) => {
+                // 构建请求数据
+                const requestData = {
+                    id: ID
+                };
+
+                // 发送POST请求
+                fetch('/send_nerftask_ByID', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('网络请求失败');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    resolve(data);
+                })
+                .catch(error => {
+                    console.error('请求Nerf计算失败:', error);
+                    reject(error);
+                });
+            });
+        }
+
+        // 更新nerf计算状态为等待计算
+        function updataNerfactoProgress(ID) {
+            return new Promise((resolve, reject) => {
+                // 构建请求数据
+                const requestData = {
+                    id: ID,
+                    progressVal: "Queue"  // 添加进度值参数
+                };
+
+                // 发送POST请求
+                fetch('/updataNerfactoProgress', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('网络请求失败');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    resolve(data);
+                })
+                .catch(error => {
+                    console.error('更新Nerf进度失败:', error);
+                    reject(error);
+                });
+            });
+        }
+
+        // 根据ID请求本地数据库上的NeRF训练进度-判断point_cloud.ply是否完成
+        function Get_SQLData_NeRF_FinishByID(ID) {
+
+            // 指定API的URL
+            const apiUrl = ClientServer_URL + "get_NerfByID";
+
+            // 构建包含ID参数的请求体
+            const requestBody = {
+                id: ID,
+            };
+
+            // 使用Fetch API进行POST请求
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            })
+                .then(response => {
+                    // 检查请求是否成功
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.status}`);
+                    }
+                    // 将响应解析为JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // 解析message字段中的JSON字符串
+                    var messageObject = JSON.parse(data.message);
+
+                    // 处理获取到的数据
+                    if (data.status === 'success') {
+                        const finish = messageObject.nerfacto_status;
+                        let Button_Export_PointCloud = document.getElementById('Export_PointCloud');
+
+                        // 判断当前任务训练是否完成
+                        if (finish) {
+
+                            // 将Button_Export_PointCloud按钮设为可用状态
+                            Button_Export_PointCloud.disabled = false;
+
+                            // 下载OBJ模型事件
+                            if (Button_Export_PointCloud) {
+                                Button_Export_PointCloud.addEventListener('click', () => {
+                                    // 设置按钮的链接和下载属性
+                                    let fileUrl = updata_http + "uploads/" + ID + "/pcd/point_cloud.ply";
+                                    let a = document.createElement('a');
+                                    a.href = fileUrl;
+                                    a.download = 'file.pdf'; // 设置下载的文件名
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                });
+                            }
+                        }
+                    } else {
+                        // 处理服务器返回的错误消息
+                        console.error('Server error:', data.message);
+                    }
+                })
+                .catch(error => {
+                    // 处理错误
+                    console.error('Fetch error:', error);
+                });
+
+        }
+
+        // 查询其他格式GLTF FBX 3DS X STL转换状态
+        function GetExportClassBtn(ID) {
+            // GLTF
+            const Button_exportgltf = document.getElementById('Export_gltf');
+
+            // 查询gltf格式转换状态
+            var gltf = Get_SQLData_ExportClassStateByID(ID, "gltf");
+
+            // 使用 then 方法处理异步操作结果
+            gltf.then(result => {
+                if (result) {
+                    // 激活gltf按钮
+                    Button_exportgltf.disabled = false;
+                    // 下载模型事件
+                    if (Button_exportgltf) {
+                        // 转换完成后设置为可点击
+                        Button_exportgltf.innerHTML = 'GLTF';
+                        Button_exportgltf.disabled = false;
+                        Button_exportgltf.addEventListener('click', () => {
+                            // 设置按钮的链接和下属性
+                            let fileUrl = updata_http + "uploads/" + ID + '/gltf_' + ID + '.zip';
+                            let a = document.createElement('a');
+                            a.href = fileUrl;
+                            a.download = 'file.pdf'; // 设置下载的文件名
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                        });
+                    }
+
+                }
+            });
+
+            // FBX
+            const Button_exportfbx = document.getElementById('Export_fbx');
+
+            // 查询fbx格式转换状态
+            var fbx = Get_SQLData_ExportClassStateByID(ID, "fbx");
+
+            // 使用 then 方法处理异步操作结果
+            fbx.then(result => {
+                if (result) {
+                    // 激活fbx按钮
+                    Button_exportfbx.disabled = false;
+                    // 下载模型事件
+                    if (Button_exportfbx) {
+                        // 转换完成后设置为可点击
+                        Button_exportfbx.innerHTML = 'FBX';
+                        Button_exportfbx.disabled = false;
+                        Button_exportfbx.addEventListener('click', () => {
+                            // 设置按钮的链接和下载属性
+                            let fileUrl = updata_http + "uploads/" + ID + '/fbx_' + ID + '.zip';
+                            let a = document.createElement('a');
+                            a.href = fileUrl;
+                            a.download = 'file.pdf'; // 设置下载的文件名
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                        });
+                    }
+
+                }
+            });
+
+            // 3DS
+            const Button_export3ds = document.getElementById('Export_3ds');
+
+            // 查询3ds格式转换状态
+            var _3ds = Get_SQLData_ExportClassStateByID(ID, "3ds");
+
+
+            // 使用 then 方法处理异步操作结果
+            _3ds.then(result => {
+                if (result) {
+                    // 激活3ds按钮
+                    Button_export3ds.disabled = false;
+                    // 下载模型事件
+                    if (Button_export3ds) {
+                        // 转换完成后设置为可点击
+                        Button_export3ds.innerHTML = '3DS';
+                        Button_export3ds.disabled = false;
+                        Button_export3ds.addEventListener('click', () => {
+                            // 设置按钮的链接和下载属性
+                            let fileUrl = updata_http + "uploads/" + ID + '/3ds_' + ID + '.zip';
+                            let a = document.createElement('a');
+                            a.href = fileUrl;
+                            console.log(fileUrl);
+                            a.download = 'file.pdf'; // 设置下载的文件名
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                        });
+                    }
+
+                }
+            });
+
+            // X
+            const Button_exportX = document.getElementById('Export_x');
+
+            // 查询3ds格式转换状态
+            var _x = Get_SQLData_ExportClassStateByID(ID, "x");
+
+
+            // 使用 then 方法处理异步操作结果
+            _x.then(result => {
+                if (result) {
+                    // 激活3ds按钮
+                    Button_exportX.disabled = false;
+                    // 下载模型事件
+                    if (Button_exportX) {
+                        // 转换完成后设置为可点击
+                        Button_exportX.innerHTML = 'X';
+                        Button_exportX.disabled = false;
+                        Button_exportX.addEventListener('click', () => {
+                            // 设置按钮的链接和下载属性
+                            let fileUrl = updata_http + "uploads/" + ID + '/x_' + ID + '.zip';
+                            let a = document.createElement('a');
+                            a.href = fileUrl;
+                            a.download = 'file.pdf'; // 设置下载的文件名
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                        });
+                    }
+
+                }
+            });
+
+            // STL
+            const Button_exportSTL = document.getElementById('Export_stl');
+
+            // 查询3ds格式转换状态
+            var _stl = Get_SQLData_ExportClassStateByID(ID, "stl");
+
+
+            // 使用 then 方法处理异步操作结果
+            _stl.then(result => {
+                if (result) {
+                    // 激活3ds按钮
+                    Button_exportSTL.disabled = false;
+                    // 下载模型事件
+                    if (Button_exportSTL) {
+                        // 转换完成后设置为可点击
+                        Button_exportSTL.innerHTML = 'STL';
+                        Button_exportSTL.disabled = false;
+                        Button_exportSTL.addEventListener('click', () => {
+                            // 设置按钮的链接和下载属性
+                            let fileUrl = updata_http + "uploads/" + ID + '/stl_' + ID + '.zip';
+                            let a = document.createElement('a');
+                            a.href = fileUrl;
+                            a.download = 'file.pdf'; // 设置下载的文件名
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                        });
+                    }
+
+                }
+            });
+
+        }
+
+        // 根据ID请求本地数据库上的Export格式状态
+        function Get_SQLData_ExportClassStateByID(ID, TYPE) {
+            const apiUrl = ClientServer_URL + "get_ExportClassByID";
+
+            const requestBody = {
+                project_name: ID,
+                export_type: TYPE
+            };
+
+            return new Promise((resolve, reject) => {
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Network response was not ok: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+                            const messageObject = JSON.parse(data.message);
+                            const finish = messageObject.export_Class_state;
+                            resolve(finish === 1);
+                        } else {
+                            resolve(false);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Request failed:', error);
+                        resolve(false);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>
