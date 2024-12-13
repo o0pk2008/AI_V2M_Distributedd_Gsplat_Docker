@@ -239,10 +239,7 @@
             previewImg.setAttribute('src', updata_http + "uploads/" + idKey + "/sfm/images_4/frame_00001.png");
 
             // 判断point_cloud.ply是否完成
-            Get_SQLData_NeRF_FinishByID(idKey);
-
-            // 请求Nerf 进度
-            // Get_SQLData_NeRF_ProgressByID(idKey);
+            Get_SQLData_NeRF_FinishByID();
 
         } else {
             alert("未提供要嵌入的URL地址");
@@ -270,17 +267,17 @@
                 calculateButton.disabled = true;
 
                 // 这里添加开始计算的逻辑
-                RequestNerfCalculation(idKey)
+                RequestNerfCalculation()
                     .then(result => {
                         console.log('Nerf计算请求成功:', result);
                         // 修改计算按钮文本
                         calculateButton.textContent = 'Task Request';
                         // 更新Nerf状态为等待计算
-                        updataNerfactoProgress(idKey);
+                        updataNerfactoProgress();
                         // 隐藏确认计算层
                         confirmationDialog.classList.add('hidden');
                         // 请求Nerf 进度
-                        timerId = setTimeout(() => Get_SQLData_NeRF_ProgressByID(idKey), 2000);
+                        timerId = setTimeout(() => Get_SQLData_NeRF_ProgressByID(), 2000);
                     })
                     .catch(error => {
                         console.error('Nerf计算请求失败:', error);
@@ -296,33 +293,27 @@
 
             // 添加点击事件处理程序
             downloadButton.addEventListener('click', () => {
-                // OtherTpye计算状态检测-修改按钮状态
-                GetExportClassBtn(idKey);
-
-                // OBJ计算状态检测-修改按钮状态
-                Get_SQLData_OBJ_ByID(idKey);
-
                 // 显示弹出面板
                 dialog_down.style.display = 'block';
             });
 
             // OtherTpye计算状态检测-修改按钮状态
-            GetExportClassBtn(idKey);
+            GetExportClassBtn();
 
             // OBJ计算状态检测-修改按钮状态
-            Get_SQLData_OBJ_ByID(idKey);
+            Get_SQLData_OBJ_ByID();
 
         })
 
         // 检查模型计算进度
         // 根据ID请求本地数据库上的OBJ转换状态
-        function Get_SQLData_OBJ_ByID(ID) {
+        function Get_SQLData_OBJ_ByID() {
             // 指定API的URL
             const apiUrl = ClientServer_URL + "get_ExportOBJByID";
 
             // 构建包含ID参数的请求体
             const requestBody = {
-                id: ID,
+                id: idKey,
             };
 
             // 使用Fetch API进行POST请求
@@ -410,7 +401,7 @@
                             return true;
                         } else {
                             // 如果没有OBJ模型，请求Nerf 进度
-                            Get_SQLData_NeRF_ProgressByID(idKey);
+                            Get_SQLData_NeRF_ProgressByID();
                             return false;
                         }
                     } else {
@@ -427,14 +418,14 @@
         }
 
         // 根据ID请求本地数据库上的NeRF训练进度
-        function Get_SQLData_NeRF_ProgressByID(ID) {
+        function Get_SQLData_NeRF_ProgressByID() {
 
             // 指定API的URL
             const apiUrl = ClientServer_URL + "get_NerfByID";
 
             // 构建包含ID参数的请求体
             const requestBody = {
-                id: ID,
+                id: idKey,
             };
 
             // 使用Fetch API进行POST请求
@@ -503,7 +494,7 @@
                                 // 显示进度条部分
                                 Nerfdialog.style.display = 'flex';
                                 // 设置计时器并将标识符存储在 timerId 中
-                                timerId = setTimeout(() => Get_SQLData_NeRF_ProgressByID(ID), 2000);
+                                timerId = setTimeout(() => Get_SQLData_NeRF_ProgressByID(), 2000);
                             } else {
                                 // 隐藏进度条部分
                                 Nerfdialog.style.display = 'none';
@@ -524,11 +515,11 @@
         }
 
         // 发送nerf计算事件到分发路由
-        function RequestNerfCalculation(ID) {
+        function RequestNerfCalculation() {
             return new Promise((resolve, reject) => {
                 // 构建请求数据
                 const requestData = {
-                    id: ID
+                    id: idKey
                 };
 
                 // 发送POST请求
@@ -556,11 +547,11 @@
         }
 
         // 更新nerf计算状态为等待计算
-        function updataNerfactoProgress(ID) {
+        function updataNerfactoProgress() {
             return new Promise((resolve, reject) => {
                 // 构建请求数据
                 const requestData = {
-                    id: ID,
+                    id: idKey,
                     progressVal: "Queue"  // 添加进度值参数
                 };
 
@@ -589,14 +580,14 @@
         }
 
         // 根据ID请求本地数据库上的NeRF训练进度-判断point_cloud.ply是否完成
-        function Get_SQLData_NeRF_FinishByID(ID) {
+        function Get_SQLData_NeRF_FinishByID() {
 
             // 指定API的URL
             const apiUrl = ClientServer_URL + "get_NerfByID";
 
             // 构建包含ID参数的请求体
             const requestBody = {
-                id: ID,
+                id: idKey,
             };
 
             // 使用Fetch API进行POST请求
@@ -657,12 +648,12 @@
         }
 
         // 查询其他格式GLTF FBX 3DS X STL转换状态
-        function GetExportClassBtn(ID) {
+        function GetExportClassBtn() {
             // GLTF
             const Button_exportgltf = document.getElementById('Export_gltf');
 
             // 查询gltf格式转换状态
-            var gltf = Get_SQLData_ExportClassStateByID(ID, "gltf");
+            var gltf = Get_SQLData_ExportClassStateByID("gltf");
 
             // 使用 then 方法处理异步操作结果
             gltf.then(result => {
@@ -693,7 +684,7 @@
             const Button_exportfbx = document.getElementById('Export_fbx');
 
             // 查询fbx格式转换状态
-            var fbx = Get_SQLData_ExportClassStateByID(ID, "fbx");
+            var fbx = Get_SQLData_ExportClassStateByID("fbx");
 
             // 使用 then 方法处理异步操作结果
             fbx.then(result => {
@@ -724,7 +715,7 @@
             const Button_export3ds = document.getElementById('Export_3ds');
 
             // 查询3ds格式转换状态
-            var _3ds = Get_SQLData_ExportClassStateByID(ID, "3ds");
+            var _3ds = Get_SQLData_ExportClassStateByID("3ds");
 
 
             // 使用 then 方法处理异步操作结果
@@ -757,7 +748,7 @@
             const Button_exportX = document.getElementById('Export_x');
 
             // 查询3ds格式转换状态
-            var _x = Get_SQLData_ExportClassStateByID(ID, "x");
+            var _x = Get_SQLData_ExportClassStateByID("x");
 
 
             // 使用 then 方法处理异步操作结果
@@ -789,7 +780,7 @@
             const Button_exportSTL = document.getElementById('Export_stl');
 
             // 查询3ds格式转换状态
-            var _stl = Get_SQLData_ExportClassStateByID(ID, "stl");
+            var _stl = Get_SQLData_ExportClassStateByID("stl");
 
 
             // 使用 then 方法处理异步操作结果
@@ -820,11 +811,11 @@
         }
 
         // 根据ID请求本地数据库上的Export格式状态
-        function Get_SQLData_ExportClassStateByID(ID, TYPE) {
+        function Get_SQLData_ExportClassStateByID(TYPE) {
             const apiUrl = ClientServer_URL + "get_ExportClassByID";
 
             const requestBody = {
-                project_name: ID,
+                project_name: idKey,
                 export_type: TYPE
             };
 
@@ -857,6 +848,24 @@
                     });
             });
         }
+    
+        // 在父页面添加消息监听
+        window.addEventListener('message', function(event) {
+            // 验证消息来源（建议添加）
+            // if (event.origin !== "期望的源") return;
+            
+            if (event.data.type === 'updateParentStatus') {
+                // 执行需要的更新操作
+                GetExportClassBtn();
+                Get_SQLData_OBJ_ByID();
+                
+                // 显示弹出面板
+                const dialog_down = document.getElementById('dialog_down');
+                if (dialog_down) {
+                    dialog_down.style.display = 'block';
+                }
+            }
+        });
     </script>
 </body>
 

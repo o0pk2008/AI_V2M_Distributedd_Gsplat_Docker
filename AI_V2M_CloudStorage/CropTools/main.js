@@ -719,11 +719,14 @@ function Get_SQLData_ExportOBJ_ProgressByID(ID) {
                     loadingText.textContent = `${'100%'}`;
                     progressBar.style.width = `${'100%'}`;
 
-                    // 隐藏弹出面板
+                    // 隐藏弹出进度面板
                     OBJdialog.style.display = 'none';
 
+                    // 通知父页面更新状态
+                    notifyParentToUpdate();
+
                 } else {
-                    // 隐藏弹出面板
+                    // 显示弹出进度面板
                     OBJdialog.style.display = 'block';
 
                     loadingText.textContent = `${progress + '%'}`;
@@ -816,6 +819,14 @@ function Get_SQLData_OBJ_ByID(ID) {
             console.error('Fetch error:', error);
             return false;
         });
+}
+
+// 通知父页面更新状态
+function notifyParentToUpdate() {
+    window.parent.postMessage({
+        type: 'updateParentStatus',
+        action: 'updateAll'
+    }, '*');
 }
 
 document.addEventListener('DOMContentLoaded', function () {

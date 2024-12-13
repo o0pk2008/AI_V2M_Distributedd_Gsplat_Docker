@@ -1,8 +1,8 @@
 # 作者: Ning
 # 文件名: modeling_serve.py
 # 描述: 用于建模计算的服务。
-# 版本: 1.0.0
-# 最后修改日期: 2024-04-08
+# 版本: 1.0.1
+# 最后修改日期: 2024-12-13
 # GPU可选状态：idle、busy、offline
 
 from flask import Flask, request, jsonify
@@ -11,6 +11,9 @@ from flask_socketio import SocketIO, send
 import os,subprocess,random,time,string,sqlite3,json,re,base64,toml,threading,socket,atexit,argparse,requests
 # 硬件信息
 import psutil,platform,datetime
+
+# 日志
+import logging
 
 # 导出文件
 import zipfile
@@ -24,6 +27,36 @@ import json
 import os
 import shutil
 import pyassimp
+
+# 配置logging
+def setup_logger():
+    logger = logging.getLogger('modeling_serve')
+    logger.setLevel(logging.INFO)
+    
+    # 创建控制台处理器
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    
+    # 创建文件处理器
+    file_handler = logging.FileHandler('modeling_serve.log', encoding='utf-8')
+    file_handler.setLevel(logging.INFO)
+    
+    # 创建格式化器
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', 
+                                datefmt='%Y-%m-%d %H:%M:%S')
+    
+    # 设置格式化器
+    console_handler.setFormatter(formatter)
+    file_handler.setFormatter(formatter)
+    
+    # 添加处理器到logger
+    logger.addHandler(console_handler)
+    logger.addHandler(file_handler)
+    
+    return logger
+
+# 初始化logger
+logger = setup_logger()
 
 # global
 global_splatfacto_config_path = None
@@ -112,14 +145,14 @@ def run_colmap(file_path,folder_name):
                     string = line.strip()
                 
                 # 调试LOG
-                print('[' + datetime.datetime.now().strftime('%H:%M:%S') + '] ' + 'colmapLOG:' + string)
+                logger.debug(f'[{datetime.datetime.now().strftime("%H:%M:%S")}] colmapLOG: {string}')
 
                 if pattern_COLMAP_1 in string:
                     # 更新数据到数据库
                     call_update_progress(folder_name , "init 1/5")  
                     # 更新数据到[客户端]数据库
                     update_project_progress(folder_name,"init 1/5",Client_Service_url)
-                    print("init 1/5")
+                    logger.info("init 1/5")
                     # ffmpeg_status = 'ffmpeg执行完成'
                 
                 if pattern_COLMAP_2 in string:
@@ -127,28 +160,28 @@ def run_colmap(file_path,folder_name):
                     call_update_progress(folder_name , "init 2/5")  
                     # 更新数据到[客户端]数据库
                     update_project_progress(folder_name,"init 2/5",Client_Service_url)
-                    print("init 2/5")
+                    logger.info("init 2/5")
 
                 if pattern_COLMAP_3 in string:
                     # 更新数据到数据库
                     call_update_progress(folder_name , "init 3/5")  
                     # 更新数据到[客户端]数据库
                     update_project_progress(folder_name,"init 3/5",Client_Service_url)
-                    print("init 3/5")
+                    logger.info("init 3/5")
 
                 if pattern_COLMAP_4 in string:
                     # 更新数据到数据库
                     call_update_progress(folder_name , "init 4/5")  
                     # 更新数据到[客户端]数据库
                     update_project_progress(folder_name,"init 4/5",Client_Service_url)
-                    print("init 4/5")
+                    logger.info("init 4/5")
 
                 if pattern_COLMAP_5 in string:
                     # 更新数据到数据库
                     call_update_progress(folder_name , "init 5/5")  
                     # 更新数据到[客户端]数据库
                     update_project_progress(folder_name,"init 5/5",Client_Service_url)
-                    print("init 5/5")
+                    logger.info("init 5/5")
 
                 # 前端日志打印
                 # socketio.emit('log', {'data': string})
@@ -156,15 +189,15 @@ def run_colmap(file_path,folder_name):
                 # 忽略无法解码的行
                 pass
             except Exception as e:
-                print(f"An error occurred: {e}")
+                logger.error(f"An error occurred: {e}")
 
         # 等待命令行窗口关闭
         process.wait()
-        print(f'Done init')
+        logger.info(f'Done init')
 
     except Exception as e:
         # 处理异常
-        print(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
         ffmpeg_status = f'ffmpeg执行失败：{e}'
 
 # V2算法 splatfacto 训练
@@ -189,7 +222,7 @@ def run_splatfacto(global_updatadir_path,folder_name,export_mesh):
         ]
 
 
-    print(command)
+    logger.debug(command)
 
     try:
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -222,7 +255,7 @@ def run_splatfacto(global_updatadir_path,folder_name,export_mesh):
             string = decoded_line.strip()
 
             # 调试LOG
-            # print('[' + datetime.datetime.now().strftime('%H:%M:%S') + '] ' + 'splatLOG:' + string)
+            # logger.debug('[' + datetime.datetime.now().strftime('%H:%M:%S') + '] ' + 'splatLOG:' + string)
 
             # 筛选进度
             matches = re.findall(pattern, string)
@@ -231,7 +264,7 @@ def run_splatfacto(global_updatadir_path,folder_name,export_mesh):
                 percentage = float(match.strip('%'))
                 # 判断数值不回滚
                 if percentage > max_printed:
-                    print(match)
+                    logger.debug(match)
                     # 更新splatfacto数据到数据库
                     call_update_progress(folder_name , match)  
                     # 更新splatfacto数据到[客户端]数据库
@@ -244,7 +277,7 @@ def run_splatfacto(global_updatadir_path,folder_name,export_mesh):
                 start = string.find("outputs")
                 end = string.find("│", start)
                 global_splatfacto_config_path = string[start:end]
-                print(global_splatfacto_config_path)
+                logger.debug(global_splatfacto_config_path)
 
             # 检测运行完成跳出循环
             if "Use ctrl+c to quit" in string:
@@ -255,16 +288,16 @@ def run_splatfacto(global_updatadir_path,folder_name,export_mesh):
 
         # 等待命令行窗口关闭
         process.wait()
-        print(f'run_splatfacto完成')
+        logger.info(f'run_splatfacto完成')
 
         # 执行export PLY
-        print(f'执行ns_export')
+        logger.info(f'执行ns_export')
 
         run_ns_export(global_updatadir_path,folder_name,export_mesh)
 
     except Exception as e:
         # 处理异常
-        print(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
         # 您可以在此处添加其他异常处理代码,例如记录错误、发送通知等
 
 # V2算法 ns-export 导出 ply
@@ -291,7 +324,7 @@ def run_ns_export(global_updatadir_path,folder_name,export_mesh):
         ]
 
 
-    print(command)
+    logger.debug(command)
     try:
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
@@ -299,7 +332,7 @@ def run_ns_export(global_updatadir_path,folder_name,export_mesh):
         return_code = process.wait()
 
         if return_code == 0:
-            print(f'ns-export完成')
+            logger.info(f'ns-export完成')
 
             # 更新数据到数据库
             call_update_progress(folder_name , '100%')  
@@ -309,7 +342,7 @@ def run_ns_export(global_updatadir_path,folder_name,export_mesh):
             # 将当前任务finish状态到[客户端]数据库
             update_project_state(folder_name,Client_Service_url)
 
-            print(f'任务结束')
+            logger.info(f'任务结束')
             # 将当前任务状态
             call_update_task_state('End',folder_name)
 
@@ -324,12 +357,12 @@ def run_ns_export(global_updatadir_path,folder_name,export_mesh):
 
             
         else:
-            print(f'train执行失败，返回码: {return_code}')  # 在执行失败时打印消息
+            logger.error(f'train执行失败，返回码: {return_code}')  # 在执行失败时打印消息
             socketio.emit('update_output', {'output': f'train执行失败，返回码: {return_code}'}, namespace='/test')
 
     except Exception as e:
         # 处理异常
-        print(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
         # 您可以在此处添加其他异常处理代码,例如记录错误、发送通知等
         socketio.emit('update_output', {'output': f'发生错误：{e}'}, namespace='/test')
 
@@ -358,7 +391,7 @@ def call_get_video_path(project_id):
         return None
 
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request to get_video_path: {e}")
+        logger.error(f"Error sending request to get_video_path: {e}")
         return None
 
 # 调用 get_project_type 获取任务类型
@@ -384,7 +417,7 @@ def call_get_project_type(project_id):
         return response.json()  # 返回 JSON 响应
 
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request to get_project_type: {e}")
+        logger.error(f"Error sending request to get_project_type: {e}")
         return None
 
 # V2算法 执行 nerfacto 训练
@@ -396,13 +429,13 @@ def run_nerfacto(project_id):
     # 获取父任务ID
     parent_task_id = call_get_video_path(project_id)
     if parent_task_id is None:
-        print("Error: Could not get parent task ID")
+        logger.error("Error: Could not get parent task ID")
         return
 
     # 获取父任务视频路径
     video_path = call_get_video_path(parent_task_id)
     if video_path is None:
-        print("Error: Could not get video path")
+        logger.error("Error: Could not get video path")
         return
 
 
@@ -434,7 +467,7 @@ def run_nerfacto(project_id):
         ]
 
 
-    print(command)
+    logger.debug(command)
 
     try:
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -467,7 +500,7 @@ def run_nerfacto(project_id):
             string = decoded_line.strip()
 
             # 调试LOG
-            # print('[' + datetime.datetime.now().strftime('%H:%M:%S') + '] ' + 'splatLOG:' + string)
+            # logger.debug('[' + datetime.datetime.now().strftime('%H:%M:%S') + '] ' + 'splatLOG:' + string)
 
             # 筛选进度
             matches = re.findall(pattern, string)
@@ -476,7 +509,7 @@ def run_nerfacto(project_id):
                 percentage = float(match.strip('%'))
                 # 判断数值不回滚
                 if percentage > max_printed:
-                    print(match)
+                    logger.debug(match)
 
                     # 更新Nerf数据到数据库
                     call_update_progress(project_id , match)  
@@ -490,7 +523,7 @@ def run_nerfacto(project_id):
                 start = string.find("outputs")
                 end = string.find("│", start)
                 global_nerfacto_config_path = string[start:end]
-                print(global_nerfacto_config_path)
+                logger.debug(global_nerfacto_config_path)
 
                 # 更新NerfactoConfig_Path到父任务ID[客户端]数据库
                 update_NerfactoConfig_Path(parent_task_id,global_nerfacto_config_path,Client_Service_url)
@@ -505,7 +538,7 @@ def run_nerfacto(project_id):
 
         # 等待命令行窗口关闭
         process.wait()
-        print(f'run_nerfacto完成')
+        logger.info(f'run_nerfacto完成')
 
         # 执行pcd导出-提前导出pcd方便Export页面加载点云
         run_pcd_export(global_nerfacto_config_path,parent_task_id)
@@ -526,11 +559,11 @@ def run_nerfacto(project_id):
         call_update_gpu_status('idle')
 
         # 添加ExportOBJ任务 - 改为由客户端执行
-        # print(f'执行ns_export')
+        # logger.debug(f'执行ns_export')
         # send_ExportTask_to_GPU_Manager(global_nerfacto_config_path,folder_name)
 
         # 添加Crop边界计算任务
-        print(f'执行Crop边界计算')
+        logger.info(f'执行Crop边界计算')
         send_CropTask_to_GPU_Manager(global_nerfacto_config_path,parent_task_id)
 
         # 通知GPU Manager任务结束 执行下一个任务
@@ -538,7 +571,7 @@ def run_nerfacto(project_id):
 
     except Exception as e:
         # 处理异常
-        print(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
         # 您可以在此处添加其他异常处理代码,例如记录错误、发送通知等
 
 # 调用 get_config_path 获取 configPath
@@ -569,11 +602,11 @@ def call_get_config_path(project_id):
         if 'configPath' in response_data:
             return response_data['configPath']
         else:
-            print(f"Error: {response_data.get('error', 'Unknown error')}")
+            logger.error(f"Error: {response_data.get('error', 'Unknown error')}")
             return None
 
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request to get_config_path: {e}")
+        logger.error(f"Error sending request to get_config_path: {e}")
         return None
 
     
@@ -600,7 +633,7 @@ def call_get_crop_info(project_id):
         return response.json()  # 返回 JSON 响应
 
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request to get_crop_info: {e}")
+        logger.error(f"Error sending request to get_crop_info: {e}")
         return None
 
 # 打包目录到ZIP
@@ -678,7 +711,7 @@ def run_obj_export(config,exportID,proID,bounding_box_center,bounding_box_scale,
 
 
 
-    print(command)  # 检查命令输出
+    logger.debug(command)  # 检查命令输出
 
     # 定义字符串和对应的初始化百分比
     mesh_progress = {
@@ -695,8 +728,8 @@ def run_obj_export(config,exportID,proID,bounding_box_center,bounding_box_scale,
         # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
         # stdout, stderr = process.communicate()
 
-        # print("STDOUT:", stdout.decode('utf-8'))
-        # print("STDERR:", stderr.decode('utf-8'))
+        # logger.debug("STDOUT:", stdout.decode('utf-8'))
+        # logger.debug("STDERR:", stderr.decode('utf-8'))
 
         # List of encodings to try
         encodings = ['utf-8', 'gbk', 'big5', 'shift_jis', 'latin-1']
@@ -717,14 +750,14 @@ def run_obj_export(config,exportID,proID,bounding_box_center,bounding_box_scale,
             string = decoded_line.strip()
 
             # 调试LOG
-            # print('[' + datetime.datetime.now().strftime('%H:%M:%S') + '] ' + 'splatLOG:' + string)
+            # logger.debug('[' + datetime.datetime.now().strftime('%H:%M:%S') + '] ' + 'splatLOG:' + string)
 
             # 检查字符串是否存在于字典的键中
             if any(key in string for key in mesh_progress.keys()):
                 # 找到匹配的键并打印对应的值
                 for key, value in mesh_progress.items():
                     if key in string:
-                        print(value)
+                        logger.debug(value)
 
                         # 更新obj数据到数据库
                         call_update_progress(exportID, value)
@@ -744,11 +777,11 @@ def run_obj_export(config,exportID,proID,bounding_box_center,bounding_box_scale,
         process.wait()
         # 更新obj数据到数据库
         call_update_progress(exportID, 100)
-        print(f'ns-export完成')
+        logger.info(f'ns-export完成')
 
         # 调用函数，将指定文件夹打包成ZIP文件
         zip_directory(upload_folder + '/' + proID + '/mesh/', upload_folder + '/' + proID + '/OBJ_' + proID + '.zip')
-        print(f'Zip压缩完成')
+        logger.info(f'Zip压缩完成')
 
         # 更新当前任务状态
         call_update_task_state('End',exportID)
@@ -761,7 +794,7 @@ def run_obj_export(config,exportID,proID,bounding_box_center,bounding_box_scale,
 
     except Exception as e:
         # 处理异常
-        print(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
         # 您可以在此处添加其他异常处理代码,例如记录错误、发送通知等
 
 # V2算法 执行cmd导出 pointcloud
@@ -792,7 +825,7 @@ def run_pcd_export(config,proID):
         ]
 
 
-    print(command)
+    logger.debug(command)
     try:
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
@@ -800,14 +833,14 @@ def run_pcd_export(config,proID):
         return_code = process.wait()
 
         if return_code == 0:
-            print(f'pcd-export完成')
+            logger.info(f'pcd-export完成')
 
         else:
-            print(f'train执行失败，返回码: {return_code}')  # 在执行失败时打印消息
+            logger.error(f'train执行失败，返回码: {return_code}')  # 在执行失败时打印消息
 
     except Exception as e:
         # 处理异常
-        print(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
 
 # V2自动裁剪矩阵转换
 def apply_rotation(rot_matrix, axis, theta):
@@ -934,11 +967,11 @@ def calculate_bounding_box(transforms_data_path, dataparser_data_path, point_clo
 
     # 打印包围盒的中心
     center = cropped_aabb.get_center()
-    # print("Bounding Box Center: {:.2f}, {:.2f}, {:.2f}".format(center[0], center[1], center[2]))
+    # logger.debug("Bounding Box Center: {:.2f}, {:.2f}, {:.2f}".format(center[0], center[1], center[2]))
 
     # 打印包围盒的缩放
     scale = cropped_aabb.get_max_bound() - cropped_aabb.get_min_bound()
-    # print("Bounding Box Scale: {:.2f}, {:.2f}, {:.2f}".format(scale[0], scale[1], scale[2]))
+    # logger.debug("Bounding Box Scale: {:.2f}, {:.2f}, {:.2f}".format(scale[0], scale[1], scale[2]))
     
     # 返回包围盒的中心和缩放
     return center, scale
@@ -968,7 +1001,7 @@ def convert_obj_to_gltf(input_file, output_file):
         command = [os.path.join(script_dir, 'bin', 'obj2gltf.cmd'), '-i', input_file, '-o', output_file]
 
         # Print the command to be executed
-        print(' '.join(command))
+        logger.debug(' '.join(command))
 
         # Execute the command
         subprocess.run(command, check=True)
@@ -977,7 +1010,7 @@ def convert_obj_to_gltf(input_file, output_file):
         return True
     except subprocess.CalledProcessError as e:
         # If an error occurs, print the error message and return False
-        print("Conversion failed:", e)
+        logger.error("Conversion failed:", e)
         return False
 
 # OBJ2Other转换
@@ -1007,14 +1040,14 @@ def convert_obj_to_Other(input_file, output_directory, proID, output_file_type):
                     if file.endswith(".png"):
                         png_file = os.path.join(root, file)
                         shutil.copy(png_file, output_directory)
-            print("Conversion successful!")
+            logger.info("Conversion successful!")
 
             # 调用函数，将指定文件夹打包成ZIP文件
             zip_directory(output_directory, upload_folder + '/' + proID + '/' + output_file_type + '_' + proID + '.zip')
-            print(f'Zip压缩完成')
+            logger.info(f'Zip压缩完成')
 
     except Exception as e:
-        print("An error occurred:", e)
+        logger.error("An error occurred:", e)
 
 # 定义任务请求的路由
 @app.route('/start_GPU_task', methods=['POST'])
@@ -1026,10 +1059,10 @@ def start_GPU_task():
     export_mesh = request.json.get('export_mesh')
 
     # 打印接收到的请求数据
-    print('[请求数据]')
-    print(f'project_id: {project_id}')
-    print(f'video_path: {video_path}')
-    print(f'export_mesh: {export_mesh}')
+    logger.debug('[请求数据]')
+    logger.debug(f'project_id: {project_id}')
+    logger.debug(f'video_path: {video_path}')
+    logger.debug(f'export_mesh: {export_mesh}')
 
     # 检查请求参数是否完整
     if not project_id or not video_path:
@@ -1043,7 +1076,7 @@ def start_GPU_task():
 
     # 提取文件路径的目录部分
     folder_path = os.path.dirname(video_path)
-    print(f'folder_path: {folder_path}')
+    logger.debug(f'folder_path: {folder_path}')
 
 
     # 查看数据库待计算任务
@@ -1053,14 +1086,14 @@ def start_GPU_task():
     try:
         # 判断任务类型
         taskType = call_get_project_type(project_id)
-        print(f'taskType: {taskType}')
+        logger.debug(f'taskType: {taskType}')
 
         # 从字典中获取 type 值
         task_type_value = taskType.get('type')
 
 
         if task_type_value == 'train':
-            print(f'执行: train计算')
+            logger.info(f'执行: train计算')
 
             # 执行V2算法
             # 使用回调从线程获取状态
@@ -1073,11 +1106,11 @@ def start_GPU_task():
 
             # 从回调中获取状态
             status = status_callback.get_status()
-            print(status)
+            logger.debug(status)
             
             if (status):
                 # 执行run_splatfacto()
-                print(f'执行run_splatfacto')
+                logger.info(f'执行run_splatfacto')
                 run_splatfacto(folder_path,project_id,export_mesh)
                 return jsonify({'status': 'GPU success'})
             else:
@@ -1089,12 +1122,12 @@ def start_GPU_task():
                 return jsonify({'status': 'GPU false'})
         
         elif task_type_value == 'nerfact':
-            print(f'执行: nerfact计算')
+            logger.info(f'执行: nerfact计算')
             run_nerfacto(project_id)
             
         
         elif task_type_value == 'export':
-            print('export')
+            logger.info('export')
             # V2算法中从ID获取configPath
             configPath = call_get_config_path(project_id)
 
@@ -1107,7 +1140,7 @@ def start_GPU_task():
                 crop_rotation = response_data.get("CropRotation")
 
             else:
-                print("Failed to retrieve crop information.")
+                logger.error("Failed to retrieve crop information.")
 
             # 将字符串转换为浮点数列表
             crop_position_numbers = [float(x) for x in crop_position.split(",")]
@@ -1131,7 +1164,7 @@ def start_GPU_task():
             obj_path = upload_folder + '/' + video_path + '/mesh/mesh.obj'
 
             # OBJ2GLTF转换
-            print('gltf')
+            logger.info('gltf')
             output_file = upload_folder + '/' + video_path + '/gltf/'
             convert_obj_to_Other(obj_path,output_file,video_path,'gltf')
             # 将当前任务Export finish状态到[客户端]数据库
@@ -1139,7 +1172,7 @@ def start_GPU_task():
             # 更新Mesh进度数据到[客户端]数据库
             update_ExportObj_progress(video_path,90,Client_Service_url)
 
-            print('fbx')
+            logger.info('fbx')
             output_file = upload_folder + '/' + video_path + '/fbx/'
             # OBJ2FBX转换
             convert_obj_to_Other(obj_path,output_file,video_path,'fbx')
@@ -1148,7 +1181,7 @@ def start_GPU_task():
             # 更新Mesh进度数据到[客户端]数据库
             update_ExportObj_progress(video_path,92,Client_Service_url)
 
-            print('3ds')
+            logger.info('3ds')
             output_file = upload_folder + '/' + video_path + '/3ds/'
             # OBJ23ds转换
             convert_obj_to_Other(obj_path,output_file,video_path,'3ds')
@@ -1157,7 +1190,7 @@ def start_GPU_task():
             # 更新Mesh进度数据到[客户端]数据库
             update_ExportObj_progress(video_path,94,Client_Service_url)
 
-            print('x')
+            logger.info('x')
             output_file = upload_folder + '/' + video_path + '/x/'
             # OBJ2x转换
             convert_obj_to_Other(obj_path,output_file,video_path,'x')
@@ -1166,7 +1199,7 @@ def start_GPU_task():
             # 更新Mesh进度数据到[客户端]数据库
             update_ExportObj_progress(video_path,96,Client_Service_url)
 
-            print('stl')
+            logger.info('stl')
             output_file = upload_folder + '/' + video_path + '/stl/'
             # OBJ2stl转换
             convert_obj_to_Other(obj_path,output_file,video_path,'stl')
@@ -1186,7 +1219,7 @@ def start_GPU_task():
             return jsonify({'status': 'GPU success'})
         
         elif task_type_value == 'gltf':
-            print('gltf')
+            logger.info('gltf')
             # 拼接obj文件路径
             obj_path = upload_folder + '/' + video_path + '/mesh/mesh.obj'
             # output_file = upload_folder + '/' + video_path + '/gltf/mesh.gltf'
@@ -1212,7 +1245,7 @@ def start_GPU_task():
             return jsonify({'status': 'GPU success'})
         
         elif task_type_value == 'fbx':
-            print('fbx')
+            logger.info('fbx')
             # 拼接obj文件路径
             obj_path = upload_folder + '/' + video_path + '/mesh/mesh.obj'
             output_file = upload_folder + '/' + video_path + '/fbx/'
@@ -1236,7 +1269,7 @@ def start_GPU_task():
             return jsonify({'status': 'GPU success'})
         
         elif task_type_value == '3ds':
-            print('3ds')
+            logger.info('3ds')
             # 拼接obj文件路径
             obj_path = upload_folder + '/' + video_path + '/mesh/mesh.obj'
             output_file = upload_folder + '/' + video_path + '/3ds/'
@@ -1260,7 +1293,7 @@ def start_GPU_task():
             return jsonify({'status': 'GPU success'})
         
         elif task_type_value == 'x':
-            print('x')
+            logger.info('x')
             # 拼接obj文件路径
             obj_path = upload_folder + '/' + video_path + '/mesh/mesh.obj'
             output_file = upload_folder + '/' + video_path + '/x/'
@@ -1284,7 +1317,7 @@ def start_GPU_task():
             return jsonify({'status': 'GPU success'})
         
         elif task_type_value == 'stl':
-            print('stl')
+            logger.info('stl')
             # 拼接obj文件路径
             obj_path = upload_folder + '/' + video_path + '/mesh/mesh.obj'
             output_file = upload_folder + '/' + video_path + '/stl/'
@@ -1308,7 +1341,7 @@ def start_GPU_task():
             return jsonify({'status': 'GPU success'})
 
         elif task_type_value == 'crop':
-            print('Crop calculation')
+            logger.info('Crop calculation')
             # V2算法中从ID获取configPath
             configPath = call_get_config_path(project_id)
 
@@ -1328,8 +1361,8 @@ def start_GPU_task():
             bounding_box_center, bounding_box_scale = calculate_bounding_box(transforms_data_path, dataparser_data_path, point_cloud_path)
 
             # 使用返回的包围盒中心和缩放值
-            print("Bounding Box Center:", bounding_box_center)
-            print("Bounding Box Scale:", bounding_box_scale)
+            logger.debug("Bounding Box Center:", bounding_box_center)
+            logger.debug("Bounding Box Scale:", bounding_box_scale)
 
             # 将坐标转换为字符串
             center_str = [str(coord) for coord in bounding_box_center]
@@ -1347,7 +1380,7 @@ def start_GPU_task():
             updataCropPositionAndScale(video_path,center_str_result,scale_str_result)
 
             # 等待命令行执行完毕
-            print(f'Crop calculation完成')
+            logger.info(f'Crop calculation完成')
 
             # 更新当前任务状态
             call_update_task_state('End',project_id)
@@ -1364,7 +1397,7 @@ def start_GPU_task():
     
     except Exception as e:
         # 处理任何可能的异常
-        print(f"Error in start_GPU_task: {e}")
+        logger.error(f"Error in start_GPU_task: {e}")
         call_update_gpu_status('idle')
         return jsonify({'status': 'Error', 'message': str(e)}), 500
     
@@ -1393,7 +1426,7 @@ def call_update_task_state(status, project_id):
         return response.json()  # 返回 JSON 响应
 
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request to update_task_state: {e}")
+        logger.error(f"Error sending request to update_task_state: {e}")
         return None
 
 # 调用 update_task_finish 更新任务的 finish 状态
@@ -1421,7 +1454,7 @@ def call_update_task_finish(finish, project_id):
         return response.json()  # 返回 JSON 响应
 
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request to update_task_finish: {e}")
+        logger.error(f"Error sending request to update_task_finish: {e}")
         return None
 
 
@@ -1440,7 +1473,7 @@ def send_ExportTask_to_GPU_Manager(configPath,folder_name,CropPosition,CropScale
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request: {e}")
+        logger.error(f"Error sending request: {e}")
         return None
 
 # 添加CROP计算任务到GPU队列
@@ -1458,7 +1491,7 @@ def send_CropTask_to_GPU_Manager(configPath,folder_name):
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request: {e}")
+        logger.error(f"Error sending request: {e}")
         return None
     
 # 写入文件测试
@@ -1471,7 +1504,7 @@ def write_to_file(task_id, file_path):
         file.write(f"Task ID: {task_id}\n")
         file.write(f"File Path: {file_path}\n")
 
-    print(f"Data written to file: {filename}")
+    logger.debug(f"Data written to file: {filename}")
 
 # 调用 update_gpu_status 更新 GPU 的状态
 def call_update_gpu_status(status):
@@ -1498,7 +1531,7 @@ def call_update_gpu_status(status):
         return response.json()  # 返回 JSON 响应
 
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request to update_gpu_status: {e}")
+        logger.error(f"Error sending request to update_gpu_status: {e}")
         return None
 
 # 向指定IP端口发送post请求
@@ -1515,12 +1548,12 @@ def send_retrun_task(project_id):
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request: {e}")
+        logger.error(f"Error sending request: {e}")
         return None
 
 # 通知GPU Manager 计算服务上线
 def send_online_to_GPU_Manager():
-    print("执行请求任务")
+    logger.info("执行请求任务")
     base_url = GPU_Manager_url
     endpoint = '/run_task'
     data = {'GPU': 'hello'}
@@ -1530,7 +1563,7 @@ def send_online_to_GPU_Manager():
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request: {e}")
+        logger.error(f"Error sending request: {e}")
         return None
     
 class StatusCallback:
@@ -1559,7 +1592,7 @@ class FFMpegThread(threading.Thread):
             self.status_callback.set_status(success=True)
         except Exception as e:
             # self.status_callback.set_status(f'ffmpeg执行失败：{e}')
-            print("ffmpeg执行失败")
+            logger.error("ffmpeg执行失败")
             self.status_callback.set_status(success=False)
 
 # 调用 update_progress 更新[任务数据库]的进度
@@ -1587,7 +1620,7 @@ def call_update_progress(project_id, progress):
         return response.json()  # 返回 JSON 响应
 
     except requests.exceptions.RequestException as e:
-        print(f"Error sending request to update_progress: {e}")
+        logger.error(f"Error sending request to update_progress: {e}")
         return None
 
 # 更新指定ID splatfacto进度到[客户端]数据库
@@ -1748,7 +1781,7 @@ def update_ExportFormat_state(id_parameter, server_address, format):
 # 重置指定ID ExportFormat状态到[客户端]数据库
 def reset_ExportFormat_state(id_parameter, server_address):
     try:
-        print("resetMesh")
+        logger.debug("resetMesh")
         # JSON data to be sent in the request
         data = {'id': id_parameter}
 
@@ -1793,7 +1826,7 @@ def update_NerfactoConfig_Path(id_parameter, Config_Path, server_address):
 # 更新指定ID CROP矩阵[客户端]数据库
 def updataCropPositionAndScale(id_parameter, CropPosition, CropScale):
     try:
-        print('写入裁剪矩阵')
+        logger.info('写入裁剪矩阵')
         # JSON data to be sent in the request
         data = {'id': id_parameter, 'CropPosition': CropPosition, 'CropScale': CropScale, 'CropRotation': "0.0, 0.0, 0.0"}
 
@@ -2029,16 +2062,16 @@ def get_system_infoRuntime():
 # 调用函数获取系统信息
 # system_info = get_system_info()
 
-# print(f"系统版本: {system_info['platform']} {system_info['version']}")
-# print(f"IP地址: {system_info['ip']}")
-# print(f"在线时长: {system_info['uptime']}")
-# print(f"硬盘空间: {system_info['disk_usage']}")
-# print(f"交换: {system_info['network_usage']}")
-# print(f"下载: {system_info['download_speed']}")
-# print(f"上传: {system_info['upload_speed']}")
-# print(f"CPU 使用率: {system_info['cpu']}%")
-# print(f"memory 使用率: {system_info['memory']}%")
-# print(f"disk 使用率: {system_info['disk']}%")
+# logger.debug(f"系统版本: {system_info['platform']} {system_info['version']}")
+# logger.debug(f"IP地址: {system_info['ip']}")
+# logger.debug(f"在线时长: {system_info['uptime']}")
+# logger.debug(f"硬盘空间: {system_info['disk_usage']}")
+# logger.debug(f"交换: {system_info['network_usage']}")
+# logger.debug(f"下载: {system_info['download_speed']}")
+# logger.debug(f"上传: {system_info['upload_speed']}")
+# logger.debug(f"CPU 使用率: {system_info['cpu']}%")
+# logger.debug(f"memory 使用率: {system_info['memory']}%")
+# logger.debug(f"disk 使用率: {system_info['disk']}%")
 
 # 通知GPU Manager 计算服务上线
 # 创建一个延迟执行函数
