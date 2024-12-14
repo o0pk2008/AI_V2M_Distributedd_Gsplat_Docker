@@ -15,7 +15,7 @@ http = "http://192.168.1.209:8300/"
 port = 5000
 
 [servers.database]
-path = "sql/Data.db"
+path = "sql/Data_dev.db"
 
 [servers.task_serve]
 http = "http://192.168.1.209:5200/"

@@ -7,6 +7,18 @@ from app.utils import (
 
 database_path = Config.DATABASE_PATH
 
+# user 表增加新字段
+# 注：对于已存在的表，添加字段时，无法直接获取时间戳做默认值，会报错
+user_add_cols = {
+    'nickname': 'nickname text default ""',
+    'avatar': 'avatar text default ""',
+    'phone': 'phone text default ""',
+    # 'create_time': 'create_time datetime default ""',
+    # 'update_time': 'update_time datetime default ""',
+    # 'create_time': 'create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
+    # 'update_time': 'update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP', # 每次记录更新时，自动更新时间戳
+}
+
 # projct 表新增的字段
 project_add_cols = {
     'is_deleted': 'is_deleted integer default 0 not null',
@@ -38,3 +50,4 @@ def add_columns(database_path, table_name, columns):
 # 给所有表格添加要扩充的字段
 def update_all_tables():
     add_columns(database_path, 'project', project_add_cols)
+    add_columns(database_path, 'user', user_add_cols)

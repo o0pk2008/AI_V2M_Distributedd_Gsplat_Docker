@@ -162,13 +162,13 @@ def handle_signin():
         if is_valid_email(account):
             # 如果邮箱校验合法，则是邮箱
             signin_sql = '''
-                select id, username, email, password, review from user
+                select id, username, email, password, review, avatar from user
                 where email = ?
             '''
         else:
             # 是用户名(note:有一个风险，如果用户名也是邮箱格式，则会误判，需要限制用户名格式)
             signin_sql = '''
-                select id, username, email, password, review from user
+                select id, username, email, password, review, avatar from user
                 where username = ?
             ''' 
 
@@ -188,7 +188,7 @@ def handle_signin():
             })
 
         # 解包查询结果
-        user_id, username, email, stored_password, review = user
+        user_id, username, email, stored_password, review, avatar = user
 
         # 密码错误
         if password != stored_password:
@@ -212,7 +212,8 @@ def handle_signin():
                 'user_id': user_id,
                 'username': username,
                 'email': email,
-                'review': review
+                'review': review,
+                'avatar': avatar
             }
         })
     except Exception as e:
