@@ -12,6 +12,23 @@ from datetime import datetime
 # 解决与google requests的冲突
 import requests as normal_requests
 
+# 导入配置数据
+from app.config import Config
+# 导入工具函数
+from app.utils import (
+    generate_folder_name, # 生成带日期和随机数字的文件夹名
+    allowed_file, # 检查文件扩展名是否合法
+    # create_table, # 创建数据表
+    save_to_database, # 连接数据库储存上传的数据初始化
+    send_task_to_GPU_Manager, # 上传事件请求事件分发路由
+)
+# 导入要扩充数据表方法
+from app.db_update import update_all_tables
+
+# 引入 app 的 api
+from app.api.app_api import app_api_bp
+
+
 # google登录接口
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -26,18 +43,35 @@ app.config['SECRET_KEY'] = '890831'  # 用于加密 SocketIO 通信，替换为�
 socketio = SocketIO(app)
 
 # 读取 TOML 文件
-with open('config.toml', 'r') as file:
-    toml_data = toml.load(file)
+# with open('config.toml', 'r') as file:
+#     toml_data = toml.load(file)
 
 # 获取 TOML 字段值
-CloudStorage = toml_data.get('servers', {}).get('upload_folder', {}).get('http')
-updata_url = toml_data.get('servers', {}).get('updata_url', {}).get('http')
-edit_url = toml_data.get('servers', {}).get('edit_url', {}).get('http')
-task_serve_url = toml_data.get('servers', {}).get('task_serve', {}).get('http')
-server_port = toml_data.get('servers', {}).get('home_port', {}).get('port')
-database_path = toml_data.get('servers', {}).get('database', {}).get('path')
+# CloudStorage = toml_data.get('servers', {}).get('upload_folder', {}).get('http')
+# updata_url = toml_data.get('servers', {}).get('updata_url', {}).get('http')
+# edit_url = toml_data.get('servers', {}).get('edit_url', {}).get('http')
+# task_serve_url = toml_data.get('servers', {}).get('task_serve', {}).get('http')
+# server_port = toml_data.get('servers', {}).get('home_port', {}).get('port')
+# database_path = toml_data.get('servers', {}).get('database', {}).get('path')
 
-ALLOWED_EXTENSIONS = {'mp4', 'mov'}
+# ALLOWED_EXTENSIONS = {'mp4', 'mov'}
+
+
+CloudStorage = Config.CLOUD_STORAGE
+updata_url = Config.UPDATA_URL
+edit_url = Config.EDIT_URL
+task_serve_url = Config.TASK_SERVE_URL
+server_port = Config.SERVER_PORT
+database_path = Config.DATABASE_PATH
+ALLOWED_EXTENSIONS = Config.ALLOWED_EXTENSIONS
+
+
+# 扩充数据表
+update_all_tables() # 给数据表扩充字段
+
+# 注册蓝图
+app.register_blueprint(app_api_bp) # 注册 app 的 api
+
 
 # 在文件开头配置日志
 logging.basicConfig(
@@ -46,15 +80,15 @@ logging.basicConfig(
 )
 
 # 生成带日期和随机数字的文件夹名
-def generate_folder_name():
-    current_date = datetime.now().strftime("%Y%m%d")
-    random_digits = ''.join(random.choices(string.digits, k=4))
-    folder_name = f"{current_date}_{random_digits}"
-    return folder_name
+# def generate_folder_name():
+#     current_date = datetime.now().strftime("%Y%m%d")
+#     random_digits = ''.join(random.choices(string.digits, k=4))
+#     folder_name = f"{current_date}_{random_digits}"
+#     return folder_name
 
 # 检查文件扩展名是否合法
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# def allowed_file(filename):
+#     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # 上传事件增加多线程处理与等待回调
 @app.route('/upload', methods=['POST'])
@@ -115,7 +149,7 @@ def upload_file():
             # 从回调中获取状态
             # status = status_callback.get_status()
             
-            # 请求GPU_Manager��务器进行运算
+            # 请求GPU_Manager服务器进行运算
             send_task_to_GPU_Manager(file_path, folder_name, export_mesh)
 
             # 继续执行回调
@@ -125,28 +159,29 @@ def upload_file():
         return jsonify({'error': str(e)})
 
 # 请求GPU_Manager服务器进行运算
-def send_task_to_GPU_Manager(file_path, folder_name, export_mesh):
-    # 从配置表获取GPU_Manager服务器地址
-    base_url = task_serve_url
+# def send_task_to_GPU_Manager(file_path, folder_name, export_mesh):
+#     # 从配置表获取GPU_Manager服务器地址
+#     base_url = task_serve_url
 
-    # Test case with project_id and video_path parameters
-    data = {"file_path": file_path, "folder_name": folder_name, "export_mesh": export_mesh}
-    endpoint = '/add_task'
+#     # Test case with project_id and video_path parameters
+#     data = {"file_path": file_path, "folder_name": folder_name, "export_mesh": export_mesh}
+#     endpoint = '/add_task'
 
-    try:
-        logging.info(f"正在连接GPU服务器: {base_url}")
-        response = normal_requests.post(f'{base_url}{endpoint}', json=data, timeout=5)
-        response.raise_for_status()
-        logging.info("GPU服务器连接成功")
-        return response.json()
-    except normal_requests.exceptions.ConnectionError:
-        error_msg = f"无法连接到GPU服务器 {base_url}"
-        logging.error(error_msg)
-        return {"error": "GPU服务器未启动或无法访问"}
-    except normal_requests.exceptions.RequestException as e:
-        error_msg = f"请求错误: {e}"
-        logging.error(error_msg)
-        return {"error": f"请求失败: {str(e)}"}
+#     try:
+#         logging.info(f"正在连接GPU服务器: {base_url}")
+#         response = normal_requests.post(f'{base_url}{endpoint}', json=data, timeout=5)
+#         response.raise_for_status()
+#         logging.info("GPU服务器连接成功")
+#         return response.json()
+#     except normal_requests.exceptions.ConnectionError:
+#         error_msg = f"无法连接到GPU服务器 {base_url}"
+#         logging.error(error_msg)
+#         return {"error": "GPU服务器未启动或无法访问"}
+#     except normal_requests.exceptions.RequestException as e:
+#         error_msg = f"请求错误: {e}"
+#         logging.error(error_msg)
+#         return {"error": f"请求失败: {str(e)}"}
+
 
 # 响应页面获发送nerf计算事件到分发路由
 @app.route('/send_nerftask_ByID', methods=['POST'])
@@ -281,52 +316,52 @@ def send_ExportFormatTask_to_GPU_Manager():
         return None
 
 # 连接数据库储存上传的数据初始化
-def save_to_database(filename,projcet_name,privacy,user_name,user_id,export_mesh):
-    conn = sqlite3.connect(database_path)
-    cursor = conn.cursor()
+# def save_to_database(filename,projcet_name,privacy,user_name,user_id,export_mesh):
+#     conn = sqlite3.connect(database_path)
+#     cursor = conn.cursor()
 
-    # 获取服务器时间
-    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    # 定义要插入的数据，注意"Queue"这个值在前端页面有引用
-    color = "0.0,0.0,0.0,1.0"
-    project_data = (filename, current_time, user_name, projcet_name, privacy, 0, "Queue", 0, 0, 0, user_id, color, "", "0", 0, "0", 0, 0, 0, 0, 0, 0, 0, "0.0, 0.0, 0.0", "1.0, 1.0, 1.0", "0.0, 0.0, 0.0", export_mesh)
-    # SQL语句向项目表中插入数据
-    insert_query = '''
-        INSERT INTO project (
-            project_name, 
-            project_date, 
-            project_user, 
-            project_title, 
-            project_public, 
-            project_state, 
-            project_progress,
-            project_edit,
-            project_down_num,
-            project_like_num,
-            project_user_id,
-            project_color,
-            nerfacto_config_path,
-            nerfacto_progress,
-            nerfacto_status,
-            export_obj_progress,
-            export_obj_state,
-            export_gltf_state,
-            export_fbx_state,
-            export_ply_state,
-            export_3ds_state,
-            export_x_state,
-            export_stl_state,
-            CropPosition,
-            CropScale,
-            CropRotation,
-            export_mesh
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    '''
-    # 执行SQL语句插入数据
-    cursor.execute(insert_query, project_data)
+#     # 获取服务器时间
+#     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#     # 定义要插入的数据，注意"Queue"这个值在前端页面有引用
+#     color = "0.0,0.0,0.0,1.0"
+#     project_data = (filename, current_time, user_name, projcet_name, privacy, 0, "Queue", 0, 0, 0, user_id, color, "", "0", 0, "0", 0, 0, 0, 0, 0, 0, 0, "0.0, 0.0, 0.0", "1.0, 1.0, 1.0", "0.0, 0.0, 0.0", export_mesh)
+#     # SQL语句向项目表中插入数据
+#     insert_query = '''
+#         INSERT INTO project (
+#             project_name, 
+#             project_date, 
+#             project_user, 
+#             project_title, 
+#             project_public, 
+#             project_state, 
+#             project_progress,
+#             project_edit,
+#             project_down_num,
+#             project_like_num,
+#             project_user_id,
+#             project_color,
+#             nerfacto_config_path,
+#             nerfacto_progress,
+#             nerfacto_status,
+#             export_obj_progress,
+#             export_obj_state,
+#             export_gltf_state,
+#             export_fbx_state,
+#             export_ply_state,
+#             export_3ds_state,
+#             export_x_state,
+#             export_stl_state,
+#             CropPosition,
+#             CropScale,
+#             CropRotation,
+#             export_mesh
+#         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+#     '''
+#     # 执行SQL语句插入数据
+#     cursor.execute(insert_query, project_data)
 
-    conn.commit()
-    conn.close()
+#     conn.commit()
+#     conn.close()
 
 # 更新指定ID进度数据
 def updataProgress(project_name,new_progress):

@@ -1,0 +1,30 @@
+title = "Server Config"
+
+[servers]
+
+[servers.upload_folder]
+http = "F:/AI_V2M_Distributedd_Gsplat/AI_V2M_CloudStorage/uploads"
+
+[servers.updata_url]
+http = "http://192.168.1.209:8300/"
+
+[servers.edit_url]
+http = "http://192.168.1.209:8300/"
+
+[servers.home_port]
+port = 5000
+
+[servers.database]
+path = "sql/Data.db"
+
+[servers.task_serve]
+http = "http://192.168.1.209:5200/"
+
+[servers.clientIP]
+http = "http://192.168.1.209:5000/"
+
+
+[cmd]
+[cmd.convert]
+command_Str_1 = "--colmap_executable=E:/Python/AI_V2M_Client_Serve/3DTools/COLMAP/COLMAP.bat"
+command_Str_2 = "--ffmpeg_executable=E:/Python/AI_V2M_Client_Serve/3DTools/ffmpeg/ffmpeg.bat"
