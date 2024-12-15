@@ -437,15 +437,25 @@ def get_object(project_id):
         cursor = conn.cursor()
 
         # 查询物件信息
-        query = '''
+        query_obejct = '''
             select * from project
             where project_id = ?
             and project_user_id = ?
             and is_deleted = 0
         '''
 
-        cursor.execute(query, (project_id, user_id, ))
+        cursor.execute(query_obejct, (project_id, user_id, ))
         object_data = cursor.fetchone() # 查询的结果
+
+        # 查询用户信息
+        query_user = '''
+            select username, email, nickname, avatar from user
+            where id = ?
+        '''
+
+        cursor.execute(query_user, (user_id,))
+        user_data = cursor.fetchone()
+
 
         object_info = None # 设置返回的数据
 
@@ -484,6 +494,7 @@ def get_object(project_id):
                 'project_down_num': object_data['project_down_num'], 
                 'project_like_num': object_data['project_like_num'], 
                 'project_user_id': object_data['project_user_id'], 
+                'project_user_avatar': user_data['avatar'],
                 'project_color': object_data['project_color'], 
                 'export': export_info,
                 'crop': crop_info,

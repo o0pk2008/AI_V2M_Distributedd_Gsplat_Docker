@@ -39,6 +39,7 @@
             position: absolute;
             top: 40px;
             left: 40px;
+            display: none;
             z-index: 9999;
             background-color: transparent;
             /* pointer-events: none; 使Logo不影响点击事件 */
@@ -48,6 +49,7 @@
             position: absolute;
             top: 40px;
             right: 40px;
+            display: none;
             z-index: 9999;
         }
 
@@ -73,6 +75,7 @@
             position: absolute;
             bottom: 40px;
             left: 40px;
+            display: none;
             color: #ffffff;
             font-size: 24px;
             line-height: 1.2;
@@ -157,6 +160,9 @@
                     event.preventDefault();
                 }
             }, {passive: false})
+
+            // 挂载页面小部件（logo、标题、下载、分享）
+            mountPageWidget();
         })
 
         function download() {
@@ -191,6 +197,23 @@
         }
         if (authorParam) {
             document.getElementById('titleTop').innerText = "Created by @" + authorParam;
+        }
+
+
+        // 挂载页面小部件（非 app 端）
+        function mountPageWidget() {
+            const platefrom = getUrlParam('plateform');
+            const isApp = platefrom && platefrom === 'app';
+
+            if(!isApp) {
+                const logo = document.querySelector('#logo');
+                const actions = document.querySelector('#actions');
+                const title = document.querySelector('#title');
+
+                logo.style.display = 'block';
+                actions.style.display = 'block';
+                title.style.display = 'block';
+            }
         }
     </script>
 </body>
