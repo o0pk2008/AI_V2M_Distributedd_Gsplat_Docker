@@ -351,7 +351,7 @@
                             if (Button_exportOBJ) {
                                 Button_exportOBJ.addEventListener('click', () => {
                                     // 设置按钮的链接和下载属性
-                                    let fileUrl = updata_http + "uploads/" + ID + "/OBJ_" + ID + ".zip";
+                                    let fileUrl = updata_http + "uploads/" + idKey + "/OBJ_" + idKey + ".zip";
                                     let a = document.createElement('a');
                                     a.href = fileUrl;
                                     a.download = 'file.pdf'; // 设置下载的文件名
@@ -368,7 +368,7 @@
                             if (Button_export_ply) {
                                 Button_export_ply.addEventListener('click', () => {
                                     // 设置按钮的链接和下载属性
-                                    let fileUrl = updata_http + "uploads/" + ID + "/mesh/poisson_mesh.ply";
+                                    let fileUrl = updata_http + "uploads/" + idKey + "/mesh/poisson_mesh.ply";
                                     let a = document.createElement('a');
                                     a.href = fileUrl;
                                     a.download = 'file.pdf'; // 设置下载的文件名
@@ -625,7 +625,7 @@
                             if (Button_Export_PointCloud) {
                                 Button_Export_PointCloud.addEventListener('click', () => {
                                     // 设置按钮的链接和下载属性
-                                    let fileUrl = updata_http + "uploads/" + ID + "/pcd/point_cloud.ply";
+                                    let fileUrl = updata_http + "uploads/" + idKey + "/pcd/point_cloud.ply";
                                     let a = document.createElement('a');
                                     a.href = fileUrl;
                                     a.download = 'file.pdf'; // 设置下载的文件名
@@ -667,7 +667,7 @@
                         Button_exportgltf.disabled = false;
                         Button_exportgltf.addEventListener('click', () => {
                             // 设置按钮的链接和下属性
-                            let fileUrl = updata_http + "uploads/" + ID + '/gltf_' + ID + '.zip';
+                            let fileUrl = updata_http + "uploads/" + idKey + '/gltf_' + idKey + '.zip';
                             let a = document.createElement('a');
                             a.href = fileUrl;
                             a.download = 'file.pdf'; // 设置下载的文件名
@@ -698,7 +698,7 @@
                         Button_exportfbx.disabled = false;
                         Button_exportfbx.addEventListener('click', () => {
                             // 设置按钮的链接和下载属性
-                            let fileUrl = updata_http + "uploads/" + ID + '/fbx_' + ID + '.zip';
+                            let fileUrl = updata_http + "uploads/" + idKey + '/fbx_' + idKey + '.zip';
                             let a = document.createElement('a');
                             a.href = fileUrl;
                             a.download = 'file.pdf'; // 设置下载的文件名
@@ -730,7 +730,7 @@
                         Button_export3ds.disabled = false;
                         Button_export3ds.addEventListener('click', () => {
                             // 设置按钮的链接和下载属性
-                            let fileUrl = updata_http + "uploads/" + ID + '/3ds_' + ID + '.zip';
+                            let fileUrl = updata_http + "uploads/" + idKey + '/3ds_' + idKey + '.zip';
                             let a = document.createElement('a');
                             a.href = fileUrl;
                             console.log(fileUrl);
@@ -763,7 +763,7 @@
                         Button_exportX.disabled = false;
                         Button_exportX.addEventListener('click', () => {
                             // 设置按钮的链接和下载属性
-                            let fileUrl = updata_http + "uploads/" + ID + '/x_' + ID + '.zip';
+                            let fileUrl = updata_http + "uploads/" + idKey + '/x_' + idKey + '.zip';
                             let a = document.createElement('a');
                             a.href = fileUrl;
                             a.download = 'file.pdf'; // 设置下载的文件名
@@ -795,7 +795,7 @@
                         Button_exportSTL.disabled = false;
                         Button_exportSTL.addEventListener('click', () => {
                             // 设置按钮的链接和下载属性
-                            let fileUrl = updata_http + "uploads/" + ID + '/stl_' + ID + '.zip';
+                            let fileUrl = updata_http + "uploads/" + idKey + '/stl_' + idKey + '.zip';
                             let a = document.createElement('a');
                             a.href = fileUrl;
                             a.download = 'file.pdf'; // 设置下载的文件名
