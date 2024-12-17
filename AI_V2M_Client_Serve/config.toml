@@ -21,4 +21,4 @@ path = "sql/Data.db"
 http = "http://192.168.2.94:5200/"
 
 [servers.clientIP]
-http = "http://192.168.1.209:5000/"
+http = "http://192.168.2.94:5000/"
