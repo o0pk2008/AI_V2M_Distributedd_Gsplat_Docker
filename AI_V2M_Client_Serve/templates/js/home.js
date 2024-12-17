@@ -10,10 +10,9 @@
 var button_upload = document.querySelectorAll('.btn-updata')[0];
 
 // ClientServer_URL
-var ClientServer_URL = "http://192.168.2.94:5000/";
-
+var ClientServer_URL;
 // GPU_Manager_URL
-var GPU_Manager_URL = "http://192.168.2.94:5200/";
+var GPU_Manager_URL;
 
 // 模型下载页面
 var iframeDocument;
@@ -24,6 +23,37 @@ let timerOBJ;
 
 // 创建遮罩层元素
 var overlay;
+
+// 从服务器获取配置数据，赋值给变量
+const config = (async function() {
+    const config = await getConfig();
+    ClientServer_URL = config.client_ip;
+    GPU_Manager_URL = config.task_server;
+})();
+
+
+// 获取配置数据
+async function getConfig() {
+    try {
+        const response = await fetch('/client_api/v1/config', {
+            method: 'POST'
+        });
+
+        const data = await response.json();
+
+        if(data.status === 'success') {
+            const config = data.data;
+            return config
+        } else {
+            throw new Error(`Request failed with status: ${data}`);
+        }
+    } catch(err) {
+        console.error('Error fetching config:', err);
+        throw err;
+    }
+}
+
+
 
 // 用户退出
 function logout() {
