@@ -1,1 +1,92 @@
 2024-12-13 16:18:31 - INFO - 执行请求任务
+2024-12-14 17:29:28 - INFO - 执行请求任务
+2024-12-14 17:29:38 - INFO - 执行: nerfact计算
+2024-12-14 17:41:46 - INFO - run_nerfacto完成
+2024-12-14 17:42:06 - INFO - pcd-export完成
+2024-12-14 17:42:06 - INFO - 执行Crop边界计算
+2024-12-14 17:42:07 - INFO - Crop calculation
+2024-12-14 17:42:07 - INFO - Crop calculation
+2024-12-14 17:42:08 - INFO - 写入裁剪矩阵
+2024-12-14 17:42:08 - INFO - 写入裁剪矩阵
+2024-12-14 17:42:08 - INFO - Crop calculation完成
+2024-12-14 17:42:08 - INFO - Crop calculation完成
+2024-12-14 17:42:08 - ERROR - Exception on /start_GPU_task [POST]
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/nerfstudio/lib/python3.8/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/root/miniconda3/envs/nerfstudio/lib/python3.8/site-packages/flask/app.py", line 883, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "/root/miniconda3/envs/nerfstudio/lib/python3.8/site-packages/flask/app.py", line 902, in finalize_request
+    response = self.make_response(rv)
+  File "/root/miniconda3/envs/nerfstudio/lib/python3.8/site-packages/flask/app.py", line 1174, in make_response
+    raise TypeError(
+TypeError: The view function for 'start_GPU_task' did not return a valid response. The function either returned None or ended without a return statement.
+2024-12-14 17:44:04 - INFO - export
+2024-12-14 17:51:00 - INFO - ns-export完成
+2024-12-14 17:51:07 - INFO - Zip压缩完成
+2024-12-14 17:51:07 - INFO - gltf
+2024-12-14 17:51:10 - INFO - Conversion successful!
+2024-12-14 17:51:11 - INFO - Zip压缩完成
+2024-12-14 17:51:11 - INFO - fbx
+2024-12-14 17:51:15 - INFO - Conversion successful!
+2024-12-14 17:51:18 - INFO - Zip压缩完成
+2024-12-14 17:51:18 - INFO - 3ds
+2024-12-14 17:51:21 - INFO - Conversion successful!
+2024-12-14 17:51:22 - INFO - Zip压缩完成
+2024-12-14 17:51:23 - INFO - x
+2024-12-14 17:51:28 - INFO - Conversion successful!
+2024-12-14 17:51:33 - INFO - Zip压缩完成
+2024-12-14 17:51:34 - INFO - stl
+2024-12-14 17:51:38 - INFO - Conversion successful!
+2024-12-14 17:51:41 - INFO - Zip压缩完成
+2024-12-14 17:55:44 - INFO - 执行: nerfact计算
+2024-12-14 18:08:03 - INFO - run_nerfacto完成
+2024-12-14 18:08:23 - INFO - pcd-export完成
+2024-12-14 18:08:23 - INFO - 执行Crop边界计算
+2024-12-14 18:08:24 - INFO - Crop calculation
+2024-12-14 18:08:24 - INFO - Crop calculation
+2024-12-14 18:08:25 - INFO - 写入裁剪矩阵
+2024-12-14 18:08:25 - INFO - 写入裁剪矩阵
+2024-12-14 18:08:25 - INFO - Crop calculation完成
+2024-12-14 18:08:25 - INFO - Crop calculation完成
+2024-12-14 18:08:25 - ERROR - Exception on /start_GPU_task [POST]
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/nerfstudio/lib/python3.8/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/root/miniconda3/envs/nerfstudio/lib/python3.8/site-packages/flask/app.py", line 883, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "/root/miniconda3/envs/nerfstudio/lib/python3.8/site-packages/flask/app.py", line 902, in finalize_request
+    response = self.make_response(rv)
+  File "/root/miniconda3/envs/nerfstudio/lib/python3.8/site-packages/flask/app.py", line 1174, in make_response
+    raise TypeError(
+TypeError: The view function for 'start_GPU_task' did not return a valid response. The function either returned None or ended without a return statement.
+2024-12-14 18:10:16 - INFO - export
+2024-12-14 18:16:30 - INFO - ns-export完成
+2024-12-14 18:16:36 - INFO - Zip压缩完成
+2024-12-14 18:16:37 - INFO - gltf
+2024-12-14 18:16:40 - INFO - Conversion successful!
+2024-12-14 18:16:41 - INFO - Zip压缩完成
+2024-12-14 18:16:41 - INFO - fbx
+2024-12-14 18:16:45 - INFO - Conversion successful!
+2024-12-14 18:16:48 - INFO - Zip压缩完成
+2024-12-14 18:16:49 - INFO - 3ds
+2024-12-14 18:16:52 - INFO - Conversion successful!
+2024-12-14 18:16:53 - INFO - Zip压缩完成
+2024-12-14 18:16:54 - INFO - x
+2024-12-14 18:16:59 - INFO - Conversion successful!
+2024-12-14 18:17:05 - INFO - Zip压缩完成
+2024-12-14 18:17:05 - INFO - stl
+2024-12-14 18:17:09 - INFO - Conversion successful!
+2024-12-14 18:17:12 - INFO - Zip压缩完成
+2024-12-16 15:06:41 - INFO - 执行: train计算
+2024-12-16 15:08:29 - INFO - init 1/5
+2024-12-16 15:09:15 - INFO - init 2/5
+2024-12-16 15:09:34 - INFO - init 3/5
+2024-12-16 15:13:30 - INFO - init 4/5
+2024-12-16 15:14:00 - INFO - init 5/5
+2024-12-16 15:14:03 - INFO - Done init
+2024-12-16 15:14:03 - INFO - 执行run_splatfacto
+2024-12-16 15:22:23 - INFO - run_splatfacto完成
+2024-12-16 15:22:23 - INFO - 执行ns_export
+2024-12-16 15:23:26 - INFO - ns-export完成
+2024-12-16 15:23:27 - INFO - 任务结束
