@@ -25,8 +25,9 @@ from app.utils import (
 # 导入要扩充数据表方法
 from app.db_update import update_all_tables
 
-# 引入 app 的 api
-from app.api.app_api import app_api_bp
+# 引入 api
+from app.api.app_api import app_api_bp # app 端的 api
+from app.api.client_api import client_api_bp # client 端的 api
 
 
 # google登录接口
@@ -71,6 +72,7 @@ update_all_tables() # 给数据表扩充字段
 
 # 注册蓝图
 app.register_blueprint(app_api_bp) # 注册 app 的 api
+app.register_blueprint(client_api_bp) # 注册 client 的 api
 
 
 # 在文件开头配置日志
