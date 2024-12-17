@@ -2,7 +2,7 @@
 # 工具函数模块
 #
 
-import sqlite3, random, re, string
+import sqlite3, random, re, string,logging
 from datetime import datetime
 # 解决与google requests的冲突
 import requests as normal_requests
