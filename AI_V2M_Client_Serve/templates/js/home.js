@@ -414,6 +414,12 @@ function handleProjectList(data, search) {
 
     // 动态创建产品列表
     projects.forEach(function (projectSql, index) {
+        // 判断物件是否被删除
+        const isDeleted = projectSql[28]; // 对应 is_deleted 字段
+        if(isDeleted === 1) {
+            return;
+        }
+
         // 判断是否存在用户自定义名称
         var project_name = projectSql[4];
         var id_data_pointer = 4;
